@@ -21,7 +21,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
         body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; }
 
-        /* Auth */
+        /* Auth Screen */
         #auth-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; }
         .auth-card { background: var(--card); padding: 40px; border-radius: 28px; width: 340px; text-align: center; border: 1px solid var(--border); }
         .auth-card input { width: 100%; padding: 14px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; }
@@ -60,10 +60,20 @@
         .input-bar input { flex: 1; background: var(--card); border: 1px solid var(--border); padding: 14px; border-radius: 14px; color: #fff; outline: none; }
         .input-bar button { background: var(--accent); border: none; width: 48px; border-radius: 14px; color: #fff; cursor: pointer; font-size: 18px; }
 
-        /* Modals */
+        /* Modal Profile */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 5000; align-items: center; justify-content: center; }
-        .modal-box { background: var(--card); padding: 30px; border-radius: 32px; width: 360px; border: 1px solid var(--border); text-align: center; }
-        .btn-action { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        .modal-box { background: var(--card); padding: 40px; border-radius: 32px; width: 400px; border: 1px solid var(--border); text-align: center; }
+        
+        .modal-avatar { width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 15px; background-size: cover; background-position: center; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .modal-name { font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .modal-un { color: var(--accent); font-size: 16px; margin-bottom: 5px; }
+        .modal-bio { color: var(--text-dim); font-size: 14px; margin-bottom: 25px; }
+
+        .btn-action { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .btn-blue { background: var(--accent); color: white; }
+        .btn-blue:hover { background: #0063cc; }
+        
+        .edit-input { width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); border-radius: 10px; color: #fff; margin-bottom: 10px; outline: none; text-align: center; }
     </style>
 </head>
 <body>
@@ -85,16 +95,16 @@
 </div>
 
 <div class="sidebar">
-    <div class="search-area"><input type="text" id="search-inp" placeholder="Поиск @юзернейма..." oninput="searchUsers(this.value)"></div>
+    <div class="search-area"><input type="text" id="search-inp" placeholder="Поиск в Untitled..." oninput="searchUsers(this.value)"></div>
     <div class="chat-list">
         <div id="search-results"></div>
-        <div class="list-label">Сообщения</div>
+        <div class="list-label">Ваши чаты</div>
         <div id="user-chats"></div>
     </div>
     <div style="padding:15px 20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:12px; cursor:pointer" onclick="showProfile('me')">
         <div class="avatar" id="my-av-small"></div>
         <div style="overflow:hidden">
-            <div id="my-name-small" style="font-weight:600; display:flex; align-items:center"></div>
+            <div id="my-name-small" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
             <div id="my-un-small" style="color:var(--accent); font-size:12px;"></div>
         </div>
     </div>
@@ -113,7 +123,7 @@
         </div>
         <div class="messages-container" id="messages-box"></div>
         <div class="input-bar">
-            <input type="text" id="msg-input" placeholder="Написать..." onkeydown="if(event.key==='Enter') sendMsg()">
+            <input type="text" id="msg-input" placeholder="Напишите что-нибудь..." onkeydown="if(event.key==='Enter') sendMsg()">
             <button onclick="sendMsg()">➤</button>
         </div>
     </div>
@@ -124,16 +134,22 @@
 
 <div class="modal" id="modal">
     <div class="modal-box">
-        <div class="avatar" id="modal-av" style="width:100px; height:100px; margin: 0 auto 15px; cursor:pointer" onclick="document.getElementById('file-input').click()"></div>
+        <div class="modal-avatar" id="modal-av" onclick="document.getElementById('file-input').click()"></div>
         <input type="file" id="file-input" hidden accept="image/*" onchange="uploadPhoto(this)">
-        <h2 id="view-name"></h2>
-        <div id="view-un" style="color:var(--accent); margin-bottom:10px"></div>
-        <p id="view-bio" style="color:var(--text-dim); margin-bottom:20px"></p>
-        <div id="edit-mode">
-            <input type="text" id="edit-name" style="width:100%; padding:10px; background:#000; border:1px solid var(--border); border-radius:10px; color:#fff; margin-bottom:10px" placeholder="Имя">
-            <button class="btn-action" style="background:var(--accent); color:white" onclick="saveProfile()">Сохранить</button>
+        
+        <div id="profile-view-content">
+            <div class="modal-name" id="view-name"></div>
+            <div class="modal-un" id="view-un"></div>
+            <div class="modal-bio" id="view-bio"></div>
         </div>
-        <button id="chat-start-btn" class="btn-action" style="background:var(--accent); color:white; display:none">Написать</button>
+
+        <div id="edit-mode" style="display:none">
+            <input type="text" id="edit-name" class="edit-input" placeholder="Имя">
+            <input type="text" id="edit-bio" class="edit-input" placeholder="Био (например: Untitled CEO)">
+            <button class="btn-action btn-blue" onclick="saveProfile()">Сохранить</button>
+        </div>
+
+        <button id="chat-start-btn" class="btn-action btn-blue" style="display:none">Написать</button>
         <button class="btn-action" style="background:none; color:var(--text-dim)" onclick="closeModal()">Закрыть</button>
     </div>
 </div>
@@ -156,7 +172,7 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth(), db = firebase.database();
 
-    let me = null, activeChatId = null, currentPeerId = null, isReg = false;
+    let me = null, meData = null, activeChatId = null, currentPeerId = null, isReg = false;
 
     const getBadge = (u) => {
         if (u.role === 'admin') return `<span class="badge badge-gold">✓</span>`;
@@ -174,11 +190,11 @@
         if (user) {
             me = user;
             db.ref('users/'+user.uid).on('value', s => {
-                const d = s.val(); if (!d) return;
+                meData = s.val(); if (!meData) return;
                 document.getElementById('auth-screen').style.display = 'none';
-                document.getElementById('my-name-small').innerHTML = d.name + getBadge(d);
-                document.getElementById('my-un-small').innerText = '@' + d.username;
-                drawAv(document.getElementById('my-av-small'), d.photo, d.name);
+                document.getElementById('my-name-small').innerHTML = meData.name + getBadge(meData);
+                document.getElementById('my-un-small').innerText = '@' + meData.username;
+                drawAv(document.getElementById('my-av-small'), meData.photo, meData.name);
                 db.ref('users/'+user.uid).update({online: true});
                 db.ref('users/'+user.uid).onDisconnect().update({online: false});
             });
@@ -188,21 +204,24 @@
 
     function loadChats() {
         db.ref('chats').on('value', async s => {
-            const container = document.getElementById('user-chats'); container.innerHTML = '';
+            const container = document.getElementById('user-chats');
+            container.innerHTML = '';
             const data = s.val() || {};
             for (let id in data) {
                 if (id.includes(me.uid)) {
                     const otherId = id.replace(me.uid, '').replace('_', '');
                     const uSnap = await db.ref('users/'+otherId).once('value');
                     const u = uSnap.val(); if (!u) continue;
+
                     const div = document.createElement('div');
-                    div.className = `chat-item ${activeChatId === id ? 'active' : ''} ${u.online ? 'is-online' : ''}`;
+                    div.className = `chat-item ${activeChatId === id ? 'active' : ''}`;
                     div.onclick = () => openChat(id, u);
                     div.innerHTML = `
                         <div class="avatar" id="av-${u.uid}"><div class="online-dot"></div></div>
                         <div style="overflow:hidden">
                             <div style="font-weight:600">${u.name}${getBadge(u)}</div>
                             <div style="color:var(--accent); font-size:11px">@${u.username}</div>
+                            <div style="color:var(--online); font-size:10px">${u.online ? 'в сети' : ''}</div>
                         </div>`;
                     container.appendChild(div);
                     drawAv(document.getElementById('av-'+u.uid), u.photo, u.name);
@@ -226,7 +245,9 @@
             const box = document.getElementById('messages-box');
             const msgs = s.val() || {};
             const keys = Object.keys(msgs);
-            if (keys.length > 0 && msgs[keys[keys.length-1]].from !== me.uid) document.getElementById('notif-sound').play().catch(()=>{});
+            if (keys.length > 0 && msgs[keys[keys.length-1]].from !== me.uid) {
+                document.getElementById('notif-sound').play().catch(()=>{});
+            }
             box.innerHTML = '';
             Object.values(msgs).forEach(m => {
                 const mDiv = document.createElement('div');
@@ -239,39 +260,11 @@
     }
 
     function sendMsg() {
-        const inp = document.getElementById('msg-input'); if (!inp.value.trim() || !activeChatId) return;
+        const inp = document.getElementById('msg-input');
+        if (!inp.value.trim() || !activeChatId) return;
         db.ref('messages/'+activeChatId).push({ from: me.uid, text: inp.value, ts: Date.now() });
         db.ref('chats/'+activeChatId).update({ lastMsg: inp.value, lastTs: Date.now() });
         inp.value = '';
-    }
-
-    function searchUsers(v) {
-        const res = document.getElementById('search-results');
-        if (!v.trim()) { res.innerHTML = ''; return; }
-        db.ref('users').orderByChild('username').startAt(v.toLowerCase()).endAt(v.toLowerCase()+'\uf8ff').once('value', s => {
-            res.innerHTML = '<div class="list-label">Глобальный поиск</div>';
-            Object.values(s.val() || {}).forEach(u => {
-                if (u.uid === me.uid) return;
-                const div = document.createElement('div');
-                div.className = 'chat-item';
-                div.innerHTML = `<div class="avatar" id="s-${u.uid}"></div><div><b>${u.name}${getBadge(u)}</b><br><small style="color:var(--accent)">@${u.username}</small></div>`;
-                div.onclick = () => showProfile('other', u.uid);
-                res.appendChild(div);
-                drawAv(document.getElementById('s-'+u.uid), u.photo, u.name);
-            });
-        });
-    }
-
-    async function handleAuth() {
-        const email = document.getElementById('auth-email').value, pass = document.getElementById('auth-pass').value;
-        try {
-            if (isReg) {
-                const un = document.getElementById('auth-username').value.toLowerCase().trim();
-                const res = await auth.createUserWithEmailAndPassword(email, pass);
-                await db.ref('users/'+res.user.uid).set({ uid: res.user.uid, name: document.getElementById('auth-name').value, username: un, email, role: 'user', online: true, verified: false, photo: '' });
-                await db.ref('usernames/'+un).set(res.user.uid);
-            } else { await auth.signInWithEmailAndPassword(email, pass); }
-        } catch(e) { alert(e.message); }
     }
 
     function showProfile(type, uid) {
@@ -280,11 +273,17 @@
             const u = s.val();
             document.getElementById('view-name').innerHTML = u.name + getBadge(u);
             document.getElementById('view-un').innerText = '@' + u.username;
-            document.getElementById('view-bio').innerText = u.bio || 'Untitled User';
+            document.getElementById('view-bio').innerText = u.bio || '';
             drawAv(document.getElementById('modal-av'), u.photo, u.name);
+            
             document.getElementById('edit-mode').style.display = type === 'me' ? 'block' : 'none';
+            document.getElementById('profile-view-content').style.display = type === 'me' ? 'none' : 'block';
             document.getElementById('chat-start-btn').style.display = type === 'me' ? 'none' : 'block';
-            if (type !== 'me') {
+
+            if (type === 'me') {
+                document.getElementById('edit-name').value = u.name;
+                document.getElementById('edit-bio').value = u.bio || '';
+            } else {
                 document.getElementById('chat-start-btn').onclick = () => {
                     const id = [me.uid, u.uid].sort().join('_');
                     db.ref('chats/'+id).update({exists: true});
@@ -299,13 +298,46 @@
         const fd = new FormData(); fd.append('image', input.files[0]);
         const r = await fetch('https://api.imgbb.com/1/upload?key='+IMGBB_KEY, {method:'POST', body:fd});
         const d = await r.json(); await db.ref('users/'+me.uid).update({photo: d.data.url});
+        drawAv(document.getElementById('modal-av'), d.data.url, meData.name);
+    }
+
+    async function saveProfile() {
+        await db.ref('users/'+me.uid).update({ 
+            name: document.getElementById('edit-name').value,
+            bio: document.getElementById('edit-bio').value 
+        });
+        closeModal();
+    }
+
+    function searchUsers(v) {
+        const res = document.getElementById('search-results');
+        if (!v.trim()) { res.innerHTML = ''; return; }
+        db.ref('users').orderByChild('username').startAt(v.toLowerCase()).endAt(v.toLowerCase()+'\uf8ff').once('value', s => {
+            res.innerHTML = '<div class="list-label">Поиск</div>';
+            Object.values(s.val() || {}).forEach(u => {
+                if (u.uid === me.uid) return;
+                const div = document.createElement('div');
+                div.className = 'chat-item';
+                div.innerHTML = `<div class="avatar" id="s-${u.uid}"></div><div><b>${u.name}${getBadge(u)}</b><br><small style="color:var(--accent)">@${u.username}</small></div>`;
+                div.onclick = () => showProfile('other', u.uid);
+                res.appendChild(div);
+                drawAv(document.getElementById('s-'+u.uid), u.photo, u.name);
+            });
+        });
     }
 
     function toggleAuth() { isReg = !isReg; document.getElementById('reg-fields').style.display = isReg?'block':'none'; }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
-    async function saveProfile() {
-        await db.ref('users/'+me.uid).update({ name: document.getElementById('edit-name').value });
-        closeModal();
+    async function handleAuth() {
+        const email = document.getElementById('auth-email').value, pass = document.getElementById('auth-pass').value;
+        try {
+            if (isReg) {
+                const un = document.getElementById('auth-username').value.toLowerCase().trim();
+                const res = await auth.createUserWithEmailAndPassword(email, pass);
+                await db.ref('users/'+res.user.uid).set({ uid: res.user.uid, name: document.getElementById('auth-name').value, username: un, email, role: 'user', online: true, verified: false, photo: '', bio: '' });
+                await db.ref('usernames/'+un).set(res.user.uid);
+            } else { await auth.signInWithEmailAndPassword(email, pass); }
+        } catch(e) { alert(e.message); }
     }
 </script>
 </body>
