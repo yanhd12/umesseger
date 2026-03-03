@@ -6,207 +6,107 @@
 <title>Untitled Messenger</title>
 
 <style>
-:root{
---bg:#000;
---side:#0a0a0a;
---card:#1c1c1e;
---accent:#007aff;
---text:#fff;
---text-dim:#8e8e93;
---border:#2c2c2e;
---online:#32d74b;
---offline:#48484a;
---gold:#ffcc00;
---blue:#0095f6;
---danger:#ff3b30;
+:root {
+    --bg:#000;
+    --side:#0a0a0a;
+    --card:#1c1c1e;
+    --accent:#007aff;
+    --text:#fff;
+    --text-dim:#8e8e93;
+    --border:#2c2c2e;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,sans-serif}
-body{background:var(--bg);color:var(--text);height:100vh;display:flex;overflow:hidden}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system,sans-serif;
+}
 
-/* AUTH SCREEN FIX */
+body{
+    background:var(--bg);
+    color:var(--text);
+    height:100vh;
+    display:flex;
+}
+
+/* AUTH SCREEN */
 #auth-screen{
-position:fixed;
-inset:0;
-background:#000;
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
+    position:fixed;
+    inset:0;
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
 }
 
 .modal-box{
-background:var(--card);
-padding:30px;
-border-radius:28px;
-width:100%;
-max-width:380px;
-border:1px solid var(--border);
-text-align:center;
+    background:var(--card);
+    padding:30px;
+    border-radius:28px;
+    width:100%;
+    max-width:380px;
+    border:1px solid var(--border);
+    text-align:center;
 }
 
-input,textarea{
-width:100%;
-padding:14px;
-background:#0a0a0a;
-border:1px solid var(--border);
-border-radius:12px;
-color:#fff;
-margin-bottom:12px;
-outline:none;
+input{
+    width:100%;
+    padding:14px;
+    background:#0a0a0a;
+    border:1px solid var(--border);
+    border-radius:12px;
+    color:#fff;
+    margin-bottom:12px;
+    outline:none;
 }
 
 .btn{
-width:100%;
-padding:14px;
-border-radius:12px;
-border:none;
-font-weight:600;
-cursor:pointer;
-background:var(--accent);
-color:#fff;
-margin-top:5px;
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    border:none;
+    font-weight:600;
+    cursor:pointer;
+    background:var(--accent);
+    color:#fff;
+    margin-top:5px;
 }
 
 .sidebar{
-width:320px;
-background:var(--side);
-border-right:1px solid var(--border);
-display:flex;
-flex-direction:column;
+    width:300px;
+    background:var(--side);
+    border-right:1px solid var(--border);
+    padding:20px;
 }
-
-.chat-item{
-display:flex;
-gap:12px;
-padding:12px 20px;
-cursor:pointer;
-align-items:center;
-transition:.2s;
-}
-.chat-item:hover{background:#1a1a1a}
-
-.avatar{
-width:45px;
-height:45px;
-border-radius:50%;
-background:#222;
-background-size:cover;
-background-position:center;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:bold;
-border:1px solid var(--border);
-}
-
-.status-dot{
-width:12px;height:12px;border-radius:50%;
-position:absolute;bottom:0;right:0;
-border:2px solid var(--side);
-background:var(--offline);
-}
-.status-dot.online{background:var(--online)}
-
-.main-chat{flex:1;display:flex;flex-direction:column}
-.messages-container{
-flex:1;
-overflow-y:auto;
-padding:20px;
-display:flex;
-flex-direction:column;
-gap:4px;
-}
-
-.msg{
-max-width:70%;
-padding:8px 14px;
-border-radius:18px;
-font-size:15px;
-position:relative;
-}
-
-.msg.mine{
-background:var(--accent);
-align-self:flex-end;
-border-bottom-right-radius:4px;
-padding-right:35px;
-}
-
-.msg.theirs{
-background:var(--card);
-align-self:flex-start;
-border-bottom-left-radius:4px;
-}
-
-.msg-status{
-position:absolute;
-bottom:4px;
-right:8px;
-font-size:10px;
-opacity:.7;
-}
-
-.dropdown-menu{
-display:none;
-position:fixed;
-background:#2c2c2e;
-border:1px solid var(--border);
-border-radius:12px;
-z-index:10000;
-width:200px;
-box-shadow:0 10px 30px rgba(0,0,0,.5);
-}
-
-.menu-item{
-padding:12px 16px;
-cursor:pointer;
-font-size:14px;
-}
-.menu-item:hover{background:#3a3a3c}
 </style>
 </head>
 <body>
 
-<audio id="msg-sound" src="https://actions.google.com/sounds/v1/notifications/notification_simple-01.mp3"></audio>
-
 <div id="auth-screen">
-<div class="modal-box">
-<h2 style="margin-bottom:20px">Untitled</h2>
+    <div class="modal-box">
+        <h2 style="margin-bottom:20px">Untitled</h2>
 
-<div id="reg-fields" style="display:none">
-<input id="auth-name" placeholder="Имя">
-<input id="auth-un" placeholder="Юзернейм">
-</div>
+        <div id="reg-fields" style="display:none">
+            <input type="text" id="auth-name" placeholder="Имя">
+            <input type="text" id="auth-un" placeholder="Юзернейм">
+        </div>
 
-<input id="auth-email" placeholder="Email">
-<input id="auth-pass" type="password" placeholder="Пароль">
+        <input type="email" id="auth-email" placeholder="Email">
+        <input type="password" id="auth-pass" placeholder="Пароль">
 
-<button class="btn" onclick="handleAuth()">Продолжить</button>
-<p onclick="toggleAuth()" style="margin-top:15px;color:var(--text-dim);cursor:pointer">
-Переключить режим
-</p>
-</div>
+        <button class="btn" onclick="handleAuth()">Продолжить</button>
+
+        <p onclick="toggleAuth()" id="auth-toggle-text"
+           style="color:var(--text-dim); font-size:13px; margin-top:15px; cursor:pointer">
+            Зарегистрироваться
+        </p>
+    </div>
 </div>
 
 <div class="sidebar">
-<div style="padding:20px">
-<input placeholder="Поиск..." oninput="searchUsers(this.value)">
-</div>
-
-<div id="search-results"></div>
-<div id="user-chats" style="flex:1"></div>
-</div>
-
-<div class="main-chat">
-<div id="active-chat-ui" style="display:none;flex-direction:column;height:100%">
-<div class="messages-container" id="messages-box"></div>
-<div style="padding:20px;display:flex;gap:10px">
-<input id="msg-input" placeholder="Сообщение..." style="margin:0" 
-onkeydown="if(event.key==='Enter')sendMsg()">
-<button onclick="sendMsg()" style="width:50px;border-radius:12px;border:none;background:var(--accent);color:#fff">➤</button>
-</div>
-</div>
+    <h3>Untitled Messenger</h3>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -214,127 +114,77 @@ onkeydown="if(event.key==='Enter')sendMsg()">
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
-const firebaseConfig={
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_AUTH_DOMAIN",
-databaseURL:"YOUR_DB_URL",
-projectId:"YOUR_PROJECT_ID"
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    databaseURL: "YOUR_DATABASE_URL",
+    projectId: "YOUR_PROJECT_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();
-const db=firebase.database();
 
-let me=null;
-let activeChatId=null;
-let isReg=false;
+const auth = firebase.auth();
+const db = firebase.database();
 
-auth.onAuthStateChanged(user=>{
-if(user){
-me=user;
-document.getElementById("auth-screen").style.display="none";
-loadChats();
-}else{
-document.getElementById("auth-screen").style.display="flex";
-}
+let isReg = false;
+
+/* AUTH STATE */
+auth.onAuthStateChanged(user => {
+    if (user) {
+        document.getElementById("auth-screen").style.display = "none";
+    } else {
+        document.getElementById("auth-screen").style.display = "flex";
+    }
 });
 
-function toggleAuth(){
-isReg=!isReg;
-document.getElementById("reg-fields").style.display=isReg?"block":"none";
+/* TOGGLE LOGIN/REGISTER */
+function toggleAuth() {
+    isReg = !isReg;
+    document.getElementById('reg-fields').style.display = isReg ? 'block' : 'none';
+    document.getElementById('auth-toggle-text').innerText =
+        isReg ? 'У меня уже есть аккаунт' : 'Зарегистрироваться';
 }
 
-async function handleAuth(){
-const email=auth-email.value;
-const pass=auth-pass.value;
+/* AUTH FUNCTION */
+async function handleAuth() {
+    const email = document.getElementById('auth-email').value.trim();
+    const pass = document.getElementById('auth-pass').value.trim();
 
-if(isReg){
-const name=auth-name.value;
-const username=auth-un.value.toLowerCase();
-const res=await auth.createUserWithEmailAndPassword(email,pass);
-await db.ref("users/"+res.user.uid).set({
-uid:res.user.uid,
-name,
-username,
-role:"user",
-online:true
-});
-}else{
-await auth.signInWithEmailAndPassword(email,pass);
-}
-}
+    if (!email || !pass) {
+        alert("Заполни email и пароль");
+        return;
+    }
 
-function searchUsers(q){
-if(!q)return;
-db.ref("users").once("value",s=>{
-const users=s.val()||{};
-const resDiv=document.getElementById("search-results");
-resDiv.innerHTML="";
-Object.values(users).forEach(u=>{
-if(u.username.includes(q.toLowerCase()) && u.uid!==me.uid){
-const div=document.createElement("div");
-div.className="chat-item";
-div.innerHTML="<div class='avatar'>"+u.name[0]+"</div>"+u.name;
-div.onclick=()=>{
-const id=[me.uid,u.uid].sort().join("_");
-db.ref("chats/"+id).set(true);
-openChat(id,u);
-resDiv.innerHTML="";
-};
-resDiv.appendChild(div);
-}
-});
-});
-}
+    try {
+        if (isReg) {
+            const name = document.getElementById('auth-name').value.trim();
+            const username = document.getElementById('auth-un').value.trim().toLowerCase();
 
-function loadChats(){
-db.ref("chats").on("value",async s=>{
-const data=s.val()||{};
-const cont=document.getElementById("user-chats");
-cont.innerHTML="";
-for(let id in data){
-if(id.includes(me.uid)){
-const other=id.replace(me.uid,"").replace("_","");
-const u=(await db.ref("users/"+other).once("value")).val();
-const div=document.createElement("div");
-div.className="chat-item";
-div.innerHTML="<div class='avatar'>"+u.name[0]+"</div>"+u.name;
-div.onclick=()=>openChat(id,u);
-cont.appendChild(div);
-}
-}
-});
-}
+            if (!name || !username) {
+                alert("Заполни имя и юзернейм");
+                return;
+            }
 
-function openChat(id,u){
-activeChatId=id;
-document.getElementById("active-chat-ui").style.display="flex";
-db.ref("messages/"+id).on("value",s=>{
-const box=document.getElementById("messages-box");
-box.innerHTML="";
-const msgs=s.val()||{};
-Object.values(msgs).forEach(m=>{
-const d=document.createElement("div");
-d.className="msg "+(m.from===me.uid?"mine":"theirs");
-d.innerText=m.text;
-if(m.from!==me.uid){
-document.getElementById("msg-sound").play();
-}
-box.appendChild(d);
-});
-box.scrollTop=box.scrollHeight;
-});
-}
+            const res = await auth.createUserWithEmailAndPassword(email, pass);
 
-function sendMsg(){
-const v=document.getElementById("msg-input").value;
-if(!v)return;
-db.ref("messages/"+activeChatId).push({
-from:me.uid,
-text:v,
-time:Date.now()
-});
-msg-input.value="";
+            await db.ref('users/' + res.user.uid).set({
+                uid: res.user.uid,
+                name: name,
+                username: username,
+                email: email,
+                role: 'user',
+                verified: false,
+                online: true,
+                createdAt: Date.now()
+            });
+
+        } else {
+            await auth.signInWithEmailAndPassword(email, pass);
+        }
+
+    } catch (err) {
+        alert(err.message);
+    }
 }
 </script>
 
