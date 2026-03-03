@@ -22,137 +22,122 @@
 
         /* Auth */
         #auth-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-        .auth-card { background: var(--card); padding: 40px; border-radius: 24px; width: 100%; max-width: 360px; text-align: center; }
-        .auth-card input { width: 100%; padding: 14px; margin-bottom: 12px; background: #1a1a1a; border: none; border-radius: 12px; color: #fff; outline: none; }
-        .auth-card button { width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: 12px; color: #fff; font-weight: 600; cursor: pointer; margin-bottom: 10px; }
-        .google-btn { background: #fff !important; color: #000 !important; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; border-radius: 12px; padding: 12px; cursor: pointer; font-weight: 600; width: 100%; }
+        .auth-card { background: var(--card); padding: 40px; border-radius: 24px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--border); }
+        .auth-card input { width: 100%; padding: 14px; margin-bottom: 12px; background: #1a1a1a; border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; }
+        .auth-card button { width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: 12px; color: #fff; font-weight: 600; cursor: pointer; }
 
-        /* App Layout */
-        #app { display: none; height: 100vh; flex-direction: row; }
-
-        /* Sidebar */
+        /* Sidebar & Search */
         .sidebar { width: 320px; background: var(--side); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
-        .side-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .search-box { padding: 15px 20px; border-bottom: 1px solid var(--border); }
+        .search-box input { width: 100%; padding: 10px 15px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: #fff; outline: none; font-size: 14px; }
         
         .list-container { flex: 1; overflow-y: auto; }
         .list-label { padding: 16px 24px 8px; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
 
-        .item { display: flex; align-items: center; gap: 12px; padding: 12px 24px; cursor: pointer; position: relative; transition: 0.2s; }
+        .item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; cursor: pointer; transition: 0.2s; }
         .item:hover { background: var(--card); }
         .item.active { background: #007aff15; border-right: 3px solid var(--accent); }
         
-        /* Стили аватара */
-        .avatar { 
-            width: 40px; height: 40px; border-radius: 12px; 
-            background: #222; display: flex; align-items: center; justify-content: center; 
-            font-weight: 600; color: var(--accent); flex-shrink: 0; position: relative; 
-            background-size: cover; background-position: center; 
-        }
-        
-        .online-status { width: 12px; height: 12px; background: var(--online); border: 2px solid var(--side); border-radius: 50%; position: absolute; bottom: -2px; right: -2px; display: none; z-index: 2; }
+        .avatar { width: 44px; height: 44px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--accent); flex-shrink: 0; position: relative; background-size: cover; background-position: center; border: 1px solid var(--border); cursor: pointer; }
+        .online-status { width: 11px; height: 11px; background: var(--online); border: 2px solid var(--side); border-radius: 50%; position: absolute; bottom: 1px; right: 1px; display: none; }
         .is-online .online-status { display: block; }
 
-        /* Profile Bar */
-        .my-profile-bar { padding: 16px 24px; border-top: 1px solid var(--border); background: var(--side); display: flex; align-items: center; gap: 12px; cursor: pointer; }
-
-        /* Chat */
+        /* Layout */
+        #app { display: none; height: 100vh; flex-direction: row; }
         .chat-main { flex: 1; display: flex; flex-direction: column; background: var(--bg); }
-        .messages { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 8px; }
-        .msg { max-width: 70%; padding: 10px 16px; border-radius: 16px; font-size: 15px; word-wrap: break-word; }
+        .messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+        .msg { max-width: 75%; padding: 10px 16px; border-radius: 18px; font-size: 15px; }
         .msg.in { background: var(--card); align-self: flex-start; border-bottom-left-radius: 4px; }
         .msg.out { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 4px; }
 
-        .input-area { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 12px; }
-        .input-area input { flex: 1; background: var(--card); border: none; padding: 12px; border-radius: 10px; color: #fff; outline: none; }
-
-        /* Modal */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-content { background: var(--card); padding: 30px; border-radius: 28px; width: 90%; max-width: 360px; text-align: center; }
-        .modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin-bottom: 10px; background: #1a1a1a; border: 1px solid var(--border); border-radius: 10px; color: #fff; outline: none; resize: none; }
+        /* Modals */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .modal-content { background: var(--card); padding: 30px; border-radius: 24px; width: 90%; max-width: 360px; text-align: center; }
+        .modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); border-radius: 10px; color: #fff; outline: none; }
         
-        /* Fullscreen View */
-        #fs-view { display: none; position: fixed; inset: 0; background: #000; z-index: 3000; align-items: center; justify-content: center; cursor: zoom-out; }
-        #fs-view img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .username-tag { color: var(--accent); font-size: 12px; font-weight: 400; }
+        #fs-view { display: none; position: fixed; inset: 0; background: #000; z-index: 3000; align-items: center; justify-content: center; }
+        #fs-view img { max-width: 100%; max-height: 100%; }
     </style>
 </head>
 <body>
 
 <div id="auth-screen">
     <div class="auth-card">
-        <h2 style="font-size: 28px; letter-spacing: -1px;">Flame</h2><br>
-        <div id="reg-fields" style="display:none"><input type="text" id="auth-name" placeholder="Имя"></div>
+        <h2>Flame</h2><br>
+        <div id="reg-fields" style="display:none">
+            <input type="text" id="auth-name" placeholder="Имя">
+            <input type="text" id="auth-username" placeholder="Юзернейм (например: fire_bot)">
+        </div>
         <input type="email" id="auth-email" placeholder="Email">
         <input type="password" id="auth-pass" placeholder="Пароль">
-        <button onclick="handleAuth()">Продолжить</button>
-        <button class="google-btn" onclick="handleGoogle()">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18"> Google
-        </button>
-        <p id="toggle-text" style="color:var(--text-dim); cursor:pointer; font-size: 13px; margin-top: 15px;" onclick="toggleAuth()">Нет аккаунта? Создать</p>
+        <button onclick="handleAuth()" style="width:100%">Войти</button>
+        <p style="color:var(--text-dim); cursor:pointer; font-size: 13px; margin-top:15px" onclick="toggleAuth()">Нет аккаунта? Регистрация</p>
     </div>
 </div>
 
 <div id="app">
     <div class="sidebar">
-        <div class="side-header"><b>FLAME</b></div>
-        <div class="list-container">
-            <div class="list-label">Ваши чаты</div>
-            <div id="chats-list"></div>
-            <div class="list-label">Все пользователи</div>
-            <div id="users-list"></div>
+        <div class="search-box">
+            <input type="text" id="user-search" placeholder="Поиск по @юзернейму..." oninput="searchUsers(this.value)">
         </div>
-        <div class="my-profile-bar" onclick="showProfile()">
+        <div class="list-container">
+            <div id="search-results" style="display:none">
+                <div class="list-label">Результаты поиска</div>
+                <div id="search-list"></div>
+            </div>
+            <div id="active-chats-section">
+                <div class="list-label">Ваши чаты</div>
+                <div id="chats-list"></div>
+            </div>
+        </div>
+        <div class="my-profile-bar" onclick="showProfile('me')" style="padding:15px 20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:12px; cursor:pointer">
             <div class="avatar" id="my-av-bottom"></div>
             <div style="flex:1">
-                <div id="my-name-bottom" style="font-weight:600; font-size:14px">Загрузка...</div>
-                <div style="font-size:11px; color:var(--online)">в сети</div>
+                <div id="my-name-bottom" style="font-weight:600; font-size:14px"></div>
+                <div id="my-username-bottom" class="username-tag"></div>
             </div>
         </div>
     </div>
+    
     <div class="chat-main">
         <div id="chat-active" style="display:none; flex-direction:column; height:100%;">
-            <div style="padding:16px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; cursor:pointer" onclick="viewOtherProfile()">
+            <div style="padding:15px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; cursor:pointer" onclick="showProfile('other', currentViewUid)">
                 <div id="active-av" class="avatar"></div>
-                <div>
-                    <b id="active-name"></b>
-                    <div id="active-status" style="font-size: 11px; color: var(--text-dim);">нажмите для профиля</div>
-                </div>
+                <div><b id="active-name"></b><div id="active-un" class="username-tag"></div></div>
             </div>
             <div class="messages" id="messages-box"></div>
-            <div class="input-area">
+            <div class="input-area" style="padding:15px 20px; border-top:1px solid var(--border); display:flex; gap:10px">
                 <input type="text" id="msg-input" placeholder="Сообщение..." onkeydown="if(event.key==='Enter') sendMsg()">
-                <button onclick="sendMsg()" style="background:var(--accent); border:none; color:#fff; padding:0 18px; border-radius:10px; cursor:pointer; font-size: 18px;">➤</button>
+                <button onclick="sendMsg()" style="background:var(--accent); border:none; color:#fff; padding:0 15px; border-radius:10px; cursor:pointer">➤</button>
             </div>
         </div>
-        <div id="chat-none" style="flex:1; display:flex; align-items:center; justify-content:center; color:var(--text-dim); flex-direction: column; gap: 10px;">
-            <div style="font-size: 40px;">💬</div>
-            Выберите, кому написать
-        </div>
+        <div id="chat-none" style="flex:1; display:flex; align-items:center; justify-content:center; color:var(--text-dim)">Выберите чат или найдите друга через поиск</div>
     </div>
 </div>
 
 <div class="modal" id="profile-modal">
     <div class="modal-content">
-        <h3 id="modal-title">Профиль</h3><br>
-        <input type="file" id="p-input" hidden onchange="uploadPhoto(this)">
-        <div class="avatar" id="edit-av-prev" style="width:100px; height:100px; margin:0 auto 15px; cursor:pointer; font-size:40px"></div>
-        <div id="profile-view-only" style="display: none;">
-            <h2 id="view-name"></h2>
-            <p id="view-bio" style="color: var(--text-dim); margin-top: 10px;"></p>
-            <button onclick="startChatFromProfile()" style="margin-top: 20px; width: 100%; padding: 12px; background: var(--accent); border: none; border-radius: 12px; color: #fff; cursor: pointer;">Написать</button>
-        </div>
-        <div id="profile-edit-fields">
+        <div class="avatar" id="edit-av-prev" style="width:100px; height:100px; margin:0 auto 15px; font-size:35px"></div>
+        <div id="my-edit-zone">
+            <input type="file" id="p-input" hidden onchange="uploadPhoto(this)">
             <input type="text" id="edit-name" placeholder="Имя">
+            <input type="text" id="edit-username" placeholder="Юзернейм">
             <textarea id="edit-bio" placeholder="О себе..."></textarea>
-            <button class="google-btn" style="width:100%; background:var(--accent)!important; color:#fff!important" onclick="saveProfile()">Сохранить</button>
-            <button onclick="auth.signOut()" style="background:none; border:none; color:var(--red); cursor:pointer; margin-top:10px; width: 100%;">Выйти из аккаунта</button>
+            <button onclick="saveProfile()" style="width:100%; padding:12px; background:var(--accent); border:none; border-radius:10px; color:#fff; font-weight:600">Сохранить</button>
+            <button onclick="auth.signOut()" style="background:none; border:none; color:var(--red); margin-top:10px; cursor:pointer">Выйти</button>
         </div>
-        <button onclick="closeModal('profile-modal')" style="background:none; border:none; color:var(--text-dim); cursor:pointer; margin-top:15px">Закрыть</button>
+        <div id="other-view-zone" style="display:none">
+            <h2 id="view-name"></h2>
+            <div id="view-un" class="username-tag" style="font-size:16px; margin:5px 0 15px"></div>
+            <p id="view-bio" style="color:var(--text-dim)"></p>
+            <button id="start-btn" style="width:100%; margin-top:20px; padding:12px; background:var(--accent); border:none; border-radius:10px; color:#fff">Написать</button>
+        </div>
+        <button onclick="closeModal('profile-modal')" style="background:none; border:none; color:var(--text-dim); margin-top:15px; cursor:pointer">Закрыть</button>
     </div>
 </div>
 
-<div id="fs-view" onclick="this.style.display='none'">
-    <img id="fs-img" src="">
-</div>
+<div id="fs-view" onclick="this.style.display='none'"><img id="fs-img"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -172,56 +157,31 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth(), db = firebase.database();
 
-    let me = null, meData = null, activeChatId = null, activeTargetId = null, isReg = false;
+    let me = null, meData = null, activeChatId = null, currentViewUid = null, isReg = false;
 
-    // Отрисовка аватарки
     function drawAv(el, photo, name) {
         if(!el) return;
-        if(photo) {
-            el.style.backgroundImage = `url('${photo}')`;
-            el.innerText = '';
-            el.onclick = (e) => {
-                e.stopPropagation();
-                openFS(photo);
-            };
-        } else {
-            el.style.backgroundImage = 'none';
-            el.innerText = name ? name[0].toUpperCase() : '?';
-            el.onclick = null;
-        }
+        if(photo) { el.style.backgroundImage = `url('${photo}')`; el.innerText = ''; }
+        else { el.style.backgroundImage = 'none'; el.innerText = name ? name[0].toUpperCase() : '?'; }
+        el.onclick = (e) => { e.stopPropagation(); if(photo) { document.getElementById('fs-img').src=photo; document.getElementById('fs-view').style.display='flex'; } };
     }
 
-    function openFS(url) {
-        document.getElementById('fs-img').src = url;
-        document.getElementById('fs-view').style.display = 'flex';
-    }
-
-    function toggleAuth() { 
-        isReg = !isReg; 
-        document.getElementById('reg-fields').style.display = isReg ? 'block' : 'none';
-        document.getElementById('toggle-text').innerText = isReg ? "Уже есть аккаунт? Войти" : "Нет аккаунта? Создать";
-    }
+    function toggleAuth() { isReg = !isReg; document.getElementById('reg-fields').style.display = isReg ? 'block' : 'none'; }
     
     async function handleAuth() {
         const email = document.getElementById('auth-email').value, pass = document.getElementById('auth-pass').value;
-        if(!email || !pass) return alert("Заполните поля");
         try {
             if(isReg) {
-                const name = document.getElementById('auth-name').value;
+                const un = document.getElementById('auth-username').value.toLowerCase().replace('@','');
+                const check = await db.ref('usernames/'+un).once('value');
+                if(check.exists()) return alert("Этот юзернейм уже занят!");
+                
                 const res = await auth.createUserWithEmailAndPassword(email, pass);
-                await db.ref('users/'+res.user.uid).set({uid:res.user.uid, name: name || 'User', email, bio: '', photo: '', online: true});
+                const userData = {uid:res.user.uid, name: document.getElementById('auth-name').value, username: un, email, bio: '', photo: '', online: true};
+                await db.ref('users/'+res.user.uid).set(userData);
+                await db.ref('usernames/'+un).set(res.user.uid);
             } else { await auth.signInWithEmailAndPassword(email, pass); }
         } catch(e) { alert(e.message); }
-    }
-
-    async function handleGoogle() {
-        try {
-            const res = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-            const s = await db.ref('users/'+res.user.uid).once('value');
-            if(!s.exists()) {
-                await db.ref('users/'+res.user.uid).set({uid:res.user.uid, name:res.user.displayName, email:res.user.email, bio: '', photo: res.user.photoURL, online: true});
-            }
-        } catch(e) { alert("Ошибка Google: " + e.message); }
     }
 
     auth.onAuthStateChanged(user => {
@@ -233,120 +193,55 @@
                 document.getElementById('auth-screen').style.display = 'none';
                 document.getElementById('app').style.display = 'flex';
                 document.getElementById('my-name-bottom').innerText = meData.name;
+                document.getElementById('my-username-bottom').innerText = '@' + meData.username;
                 drawAv(document.getElementById('my-av-bottom'), meData.photo, meData.name);
                 db.ref('users/'+user.uid).update({online: true});
                 db.ref('users/'+user.uid).onDisconnect().update({online: false});
             });
-            loadData();
+            loadChats();
         } else {
             document.getElementById('auth-screen').style.display = 'flex';
             document.getElementById('app').style.display = 'none';
         }
     });
 
-    async function uploadPhoto(input) {
-        if(!input.files[0]) return;
-        const fd = new FormData(); fd.append('image', input.files[0]);
-        try {
-            const res = await fetch('https://api.imgbb.com/1/upload?key='+IMGBB_KEY, {method:'POST', body:fd});
-            const d = await res.json();
-            await db.ref('users/'+me.uid).update({photo: d.data.url});
-            drawAv(document.getElementById('edit-av-prev'), d.data.url, meData.name);
-        } catch(e) { alert("Ошибка загрузки"); }
-    }
+    // Поиск
+    async function searchUsers(val) {
+        const query = val.toLowerCase().replace('@','');
+        const resDiv = document.getElementById('search-results');
+        const list = document.getElementById('search-list');
+        if(query.length < 2) { resDiv.style.display = 'none'; return; }
 
-    // Свой профиль
-    function showProfile() {
-        document.getElementById('modal-title').innerText = "Настройки профиля";
-        document.getElementById('profile-edit-fields').style.display = 'block';
-        document.getElementById('profile-view-only').style.display = 'none';
-        document.getElementById('edit-name').value = meData.name;
-        document.getElementById('edit-bio').value = meData.bio || '';
-        document.getElementById('edit-av-prev').onclick = () => document.getElementById('p-input').click();
-        drawAv(document.getElementById('edit-av-prev'), meData.photo, meData.name);
-        document.getElementById('profile-modal').style.display = 'flex';
-    }
-
-    // Чужой профиль
-    async function viewOtherProfile(uid) {
-        const targetId = uid || activeTargetId;
-        if(!targetId) return;
-        const s = await db.ref('users/'+targetId).once('value');
-        const u = s.val();
-        
-        document.getElementById('modal-title').innerText = "Профиль пользователя";
-        document.getElementById('profile-edit-fields').style.display = 'none';
-        document.getElementById('profile-view-only').style.display = 'block';
-        
-        document.getElementById('view-name').innerText = u.name;
-        document.getElementById('view-bio').innerText = u.bio || 'Нет описания';
-        drawAv(document.getElementById('edit-av-prev'), u.photo, u.name);
-        
-        // Временная функция для кнопки "Написать" в модалке
-        window.tempStartChat = () => {
-            startChat(u.uid, u.name, u.photo);
-            closeModal('profile-modal');
-        };
-        
-        document.getElementById('profile-modal').style.display = 'flex';
-    }
-
-    function startChatFromProfile() {
-        if(window.tempStartChat) window.tempStartChat();
-    }
-
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    
-    async function saveProfile() {
-        await db.ref('users/'+me.uid).update({
-            name: document.getElementById('edit-name').value, 
-            bio: document.getElementById('edit-bio').value
-        });
-        closeModal('profile-modal');
-    }
-
-    function loadData() {
-        // Список пользователей
-        db.ref('users').on('value', s => {
-            const list = document.getElementById('users-list');
+        db.ref('users').orderByChild('username').startAt(query).endAt(query+'\uf8ff').once('value', s => {
             list.innerHTML = '';
+            resDiv.style.display = 'block';
             Object.values(s.val() || {}).forEach(u => {
                 if(u.uid === me.uid) return;
                 const item = document.createElement('div');
-                item.className = `item ${u.online ? 'is-online' : ''}`;
-                item.innerHTML = `
-                    <div class="avatar" id="u-${u.uid}"><div class="online-status"></div></div>
-                    <div style="flex:1">
-                        <div style="font-size:14px;font-weight:600">${u.name}</div>
-                        <div style="font-size:11px;color:var(--text-dim)">${u.bio||'Привет!'}</div>
-                    </div>
-                    <button onclick="event.stopPropagation(); viewOtherProfile('${u.uid}')" style="background:none; border:none; color:var(--accent); font-size:12px; cursor:pointer">Инфо</button>
-                `;
-                item.onclick = () => startChat(u.uid, u.name, u.photo);
+                item.className = 'item';
+                item.innerHTML = `<div class="avatar" id="search-av-${u.uid}"></div>
+                                  <div><div style="font-size:14px;font-weight:600">${u.name}</div><div class="username-tag">@${u.username}</div></div>`;
+                item.onclick = () => showProfile('other', u.uid);
                 list.appendChild(item);
-                drawAv(document.getElementById('u-'+u.uid), u.photo, u.name);
+                drawAv(document.getElementById('search-av-'+u.uid), u.photo, u.name);
             });
         });
+    }
 
-        // Список чатов
+    function loadChats() {
         db.ref('chats').on('value', async s => {
             const list = document.getElementById('chats-list');
             list.innerHTML = '';
-            const chats = Object.entries(s.val() || {});
-            for (let [id, data] of chats) {
+            for (let [id, data] of Object.entries(s.val() || {})) {
                 if(id.includes(me.uid)) {
                     const otherId = id.replace(me.uid, '').replace('_', '');
                     const u = (await db.ref('users/'+otherId).once('value')).val();
                     if(!u) continue;
                     const item = document.createElement('div');
                     item.className = `item ${activeChatId===id?'active':''} ${u.online?'is-online':''}`;
-                    item.onclick = () => openChat(id, u.uid, u.name, u.photo);
-                    item.innerHTML = `
-                        <div class="avatar" id="c-${u.uid}"><div class="online-status"></div></div>
-                        <div style="overflow:hidden">
-                            <div style="font-size:14px; font-weight:600">${u.name}</div>
-                            <div style="font-size:12px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${data.lastMsg||'Нет сообщений'}</div>
-                        </div>`;
+                    item.onclick = () => openChat(id, u.uid, u.name, u.username, u.photo);
+                    item.innerHTML = `<div class="avatar" id="c-${u.uid}"><div class="online-status"></div></div>
+                                      <div style="overflow:hidden"><div style="font-size:14px;font-weight:600">${u.name}</div><div style="font-size:12px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${data.lastMsg||''}</div></div>`;
                     list.appendChild(item);
                     drawAv(document.getElementById('c-'+u.uid), u.photo, u.name);
                 }
@@ -354,29 +249,60 @@
         });
     }
 
-    function startChat(uid, name, photo) {
-        const id = [me.uid, uid].sort().join('_');
-        db.ref('chats/'+id).update({exists:true});
-        openChat(id, uid, name, photo);
+    async function showProfile(type, uid) {
+        currentViewUid = uid;
+        const isMe = type === 'me';
+        document.getElementById('my-edit-zone').style.display = isMe ? 'block' : 'none';
+        document.getElementById('other-view-zone').style.display = isMe ? 'none' : 'block';
+        
+        const s = await db.ref('users/'+(isMe ? me.uid : uid)).once('value');
+        const u = s.val();
+        
+        drawAv(document.getElementById('edit-av-prev'), u.photo, u.name);
+        if(isMe) {
+            document.getElementById('edit-name').value = u.name;
+            document.getElementById('edit-username').value = u.username;
+            document.getElementById('edit-bio').value = u.bio || '';
+            document.getElementById('edit-av-prev').onclick = () => document.getElementById('p-input').click();
+        } else {
+            document.getElementById('view-name').innerText = u.name;
+            document.getElementById('view-un').innerText = '@' + u.username;
+            document.getElementById('view-bio').innerText = u.bio || '';
+            document.getElementById('start-btn').onclick = () => { startChat(u.uid, u.name, u.username, u.photo); closeModal('profile-modal'); };
+        }
+        document.getElementById('profile-modal').style.display = 'flex';
     }
 
-    function openChat(id, targetUid, name, photo) {
-        activeChatId = id;
-        activeTargetId = targetUid;
+    async function saveProfile() {
+        const newUn = document.getElementById('edit-username').value.toLowerCase().replace('@','');
+        if(newUn !== meData.username) {
+            const check = await db.ref('usernames/'+newUn).once('value');
+            if(check.exists()) return alert("Этот юзернейм занят!");
+            await db.ref('usernames/'+meData.username).remove();
+            await db.ref('usernames/'+newUn).set(me.uid);
+        }
+        await db.ref('users/'+me.uid).update({name: document.getElementById('edit-name').value, username: newUn, bio: document.getElementById('edit-bio').value});
+        closeModal('profile-modal');
+    }
+
+    function startChat(uid, name, username, photo) {
+        const id = [me.uid, uid].sort().join('_');
+        db.ref('chats/'+id).update({exists:true});
+        openChat(id, uid, name, username, photo);
+    }
+
+    function openChat(id, uid, name, username, photo) {
+        activeChatId = id; currentViewUid = uid;
         document.getElementById('chat-none').style.display = 'none';
         document.getElementById('chat-active').style.display = 'flex';
         document.getElementById('active-name').innerText = name;
+        document.getElementById('active-un').innerText = '@' + username;
         drawAv(document.getElementById('active-av'), photo, name);
-        
         db.ref('messages/'+id).off();
         db.ref('messages/'+id).on('value', s => {
-            const box = document.getElementById('messages-box');
-            box.innerHTML = '';
+            const box = document.getElementById('messages-box'); box.innerHTML = '';
             Object.values(s.val() || {}).forEach(m => {
-                const div = document.createElement('div');
-                div.className = `msg ${m.from===me.uid?'out':'in'}`;
-                div.innerText = m.text;
-                box.appendChild(div);
+                box.innerHTML += `<div class="msg ${m.from===me.uid?'out':'in'}">${m.text}</div>`;
             });
             box.scrollTop = box.scrollHeight;
         });
@@ -389,6 +315,15 @@
         db.ref('messages/'+activeChatId).push(msg);
         db.ref('chats/'+activeChatId).update({lastMsg: inp.value, lastTs: Date.now()});
         inp.value = '';
+    }
+
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    async function uploadPhoto(input) {
+        if(!input.files[0]) return;
+        const fd = new FormData(); fd.append('image', input.files[0]);
+        const res = await fetch('https://api.imgbb.com/1/upload?key='+IMGBB_KEY, {method:'POST', body:fd});
+        const d = await res.json();
+        await db.ref('users/'+me.uid).update({photo: d.data.url});
     }
 </script>
 </body>
