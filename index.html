@@ -8,68 +8,84 @@
         :root {
             --bg: #000000;
             --side: #0a0a0a;
-            --card: #111111;
+            --card: #121212;
             --accent: #007aff;
             --text: #ffffff;
-            --text-dim: #888888;
-            --border: #1a1a1a;
-            --online: #34c759;
-            --offline: #8e8e93;
-            --red: #ff3b30;
-            --verify: #0095f6;
+            --text-dim: #8e8e93;
+            --border: #1c1c1e;
+            --online: #32d74b;
             --admin-gold: #ffcc00;
+            --verify-blue: #0095f6;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
-        body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+        body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; }
 
-        /* Табы и Скролл */
+        /* Скроллбар */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
-        #auth-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-        .auth-card { background: var(--card); padding: 40px; border-radius: 24px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--border); }
-        .auth-card input { width: 100%; padding: 14px; margin-bottom: 12px; background: #1a1a1a; border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; }
+        /* Auth */
+        #auth-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; }
+        .auth-card { background: var(--card); padding: 40px; border-radius: 28px; width: 340px; text-align: center; border: 1px solid var(--border); }
+        .auth-card input { width: 100%; padding: 14px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; }
         .auth-card button { width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: 12px; color: #fff; font-weight: 600; cursor: pointer; }
 
-        #app { display: none; height: 100vh; flex-direction: row; }
-
-        .sidebar { width: 320px; background: var(--side); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
-        .search-box { padding: 15px 20px; border-bottom: 1px solid var(--border); }
-        .search-box input { width: 100%; padding: 10px 15px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: #fff; outline: none; }
+        /* Sidebar */
+        .sidebar { width: 350px; background: var(--side); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; flex-shrink: 0; }
+        .search-area { padding: 20px; border-bottom: 1px solid var(--border); }
+        .search-area input { width: 100%; padding: 12px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; }
         
-        .list-container { flex: 1; overflow-y: auto; }
-        .list-label { padding: 16px 24px 8px; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .chat-list { flex: 1; overflow-y: auto; }
+        .list-label { padding: 15px 20px 5px; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; cursor: pointer; transition: 0.2s; position: relative; }
-        .item:hover { background: var(--card); }
-        .item.active { background: #007aff15; border-right: 3px solid var(--accent); }
+        .chat-item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; }
+        .chat-item:hover { background: #1a1a1a; }
+        .chat-item.active { background: #1a1a1a; border-left-color: var(--accent); }
+
+        /* Аватарки и статусы */
+        .avatar { width: 48px; height: 48px; border-radius: 50%; background: #222; position: relative; background-size: cover; background-position: center; flex-shrink: 0; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--accent); }
+        .online-dot { width: 12px; height: 12px; background: var(--online); border: 2px solid var(--side); border-radius: 50%; position: absolute; bottom: 2px; right: 2px; display: none; }
+        .is-online .online-dot { display: block; }
+
+        .badge { display: inline-flex; align-items: center; justify-content: center; width: 15px; height: 15px; border-radius: 50%; font-size: 9px; margin-left: 5px; vertical-align: middle; }
+        .badge-blue { background: var(--verify-blue); color: white; }
+        .badge-gold { background: var(--admin-gold); color: black; font-weight: bold; }
+
+        .u-status { font-size: 12px; margin-top: 2px; }
+        .u-status.on { color: var(--online); }
+        .u-status.off { color: var(--text-dim); }
+
+        /* Main Chat Area */
+        .main-chat { flex: 1; display: flex; flex-direction: column; background: var(--bg); position: relative; }
+        .chat-header { padding: 15px 25px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 15px; cursor: pointer; }
         
-        .avatar { width: 44px; height: 44px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--accent); flex-shrink: 0; position: relative; background-size: cover; background-position: center; border: 1px solid var(--border); }
-        .online-status { width: 11px; height: 11px; background: var(--online); border: 2px solid var(--side); border-radius: 50%; position: absolute; bottom: 1px; right: 1px; display: none; }
-        .is-online .online-status { display: block; }
+        .messages-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .message { max-width: 70%; padding: 10px 16px; border-radius: 18px; font-size: 15px; line-height: 1.4; word-wrap: break-word; }
+        .message.mine { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 4px; }
+        .message.theirs { background: var(--card); align-self: flex-start; border-bottom-left-radius: 4px; }
 
-        /* Галки */
-        .verify-badge { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; background: var(--verify); color: white; border-radius: 50%; font-size: 9px; margin-left: 5px; }
-        .admin-badge { background: var(--admin-gold); color: #000; font-weight: bold; }
+        .input-bar { padding: 20px; display: flex; gap: 12px; border-top: 1px solid var(--border); background: var(--bg); }
+        .input-bar input { flex: 1; background: var(--card); border: 1px solid var(--border); padding: 14px; border-radius: 14px; color: #fff; outline: none; }
+        .input-bar button { background: var(--accent); border: none; width: 48px; border-radius: 14px; color: #fff; cursor: pointer; font-size: 18px; transition: 0.2s; }
+        .input-bar button:hover { transform: scale(1.05); }
 
-        .status-text { font-size: 11px; margin-top: 2px; }
-        .status-online { color: var(--online); }
-        .status-offline { color: var(--text-dim); }
-
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .modal-content { background: var(--card); padding: 30px; border-radius: 28px; width: 90%; max-width: 400px; text-align: center; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 15px; }
+        /* Profile Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); z-index: 5000; align-items: center; justify-content: center; }
+        .modal-box { background: var(--card); padding: 30px; border-radius: 32px; width: 380px; border: 1px solid var(--border); text-align: center; }
+        .modal-box textarea { width: 100%; background: #000; border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 12px; margin-top: 10px; resize: none; }
         
-        .chat-main { flex: 1; display: flex; flex-direction: column; background: var(--bg); }
-        .messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
-        .msg { max-width: 75%; padding: 10px 16px; border-radius: 18px; font-size: 15px; }
-        .msg.in { background: var(--card); align-self: flex-start; border-bottom-left-radius: 4px; }
-        .msg.out { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 4px; }
+        .btn-action { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        .btn-blue { background: var(--accent); color: white; }
+        .btn-gold { background: var(--admin-gold); color: black; }
+        .btn-danger { background: none; color: #ff3b30; }
+
+        #empty-chat { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--text-dim); flex-direction: column; gap: 10px; }
     </style>
 </head>
 <body>
 
-<audio id="msg-sound" src="https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3" preload="auto"></audio>
+<audio id="notif-sound" src="https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3"></audio>
 
 <div id="auth-screen">
     <div class="auth-card">
@@ -81,58 +97,68 @@
         <input type="email" id="auth-email" placeholder="Email">
         <input type="password" id="auth-pass" placeholder="Пароль">
         <button onclick="handleAuth()">Войти</button>
-        <p style="color:var(--text-dim); cursor:pointer; font-size: 13px; margin-top:15px" onclick="toggleAuth()">Регистрация</p>
+        <div style="margin-top:15px; font-size:13px; color:var(--text-dim); cursor:pointer" onclick="toggleAuth()">Нет аккаунта? Создать</div>
     </div>
 </div>
 
-<div id="app">
-    <div class="sidebar">
-        <div class="search-box"><input type="text" id="user-search" placeholder="Поиск в Untitled..." oninput="searchUsers(this.value)"></div>
-        <div class="list-container">
-            <div id="search-results" style="display:none"><div id="search-list"></div></div>
-            <div class="list-label">Ваши чаты</div>
-            <div id="chats-list"></div>
-        </div>
-        <div class="my-profile-bar" onclick="showProfile('me')" style="padding:15px 20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:12px; cursor:pointer">
-            <div class="avatar" id="my-av-bottom"></div>
-            <div style="flex:1; overflow:hidden;"><div id="my-name-bottom" style="font-weight:600"></div><div id="my-un-bottom" style="color:var(--accent);font-size:12px"></div></div>
-        </div>
+<div class="sidebar">
+    <div class="search-area"><input type="text" id="search-inp" placeholder="Поиск в Untitled..." oninput="searchUsers(this.value)"></div>
+    <div class="chat-list" id="chats-list">
+        <div id="search-results"></div>
+        <div class="list-label">Ваши сообщения</div>
+        <div id="user-chats"></div>
     </div>
-    
-    <div class="chat-main">
-        <div id="chat-active" style="display:none; flex-direction:column; height:100%;">
-            <div style="padding:15px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; cursor:pointer" onclick="showProfile('other', currentViewUid)">
-                <div id="active-av" class="avatar"></div>
-                <div><b id="active-name"></b><span id="active-verify"></span><div id="active-un" style="color:var(--accent);font-size:12px"></div></div>
-            </div>
-            <div class="messages" id="messages-box"></div>
-            <div class="input-area" style="padding:15px 20px; border-top:1px solid var(--border); display:flex; gap:10px">
-                <input type="text" id="msg-input" placeholder="Напишите что-нибудь..." style="flex:1; background:var(--card); border:none; padding:12px; border-radius:12px; color:#fff; outline:none" onkeydown="if(event.key==='Enter') sendMsg()">
-                <button onclick="sendMsg()" style="background:var(--accent); border:none; color:#fff; padding:0 20px; border-radius:12px; cursor:pointer">➤</button>
-            </div>
+    <div style="padding:15px 20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:12px; cursor:pointer" onclick="showProfile('me')">
+        <div class="avatar" id="my-av-small"></div>
+        <div style="overflow:hidden">
+            <div id="my-name-small" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+            <div id="my-un-small" style="color:var(--accent); font-size:12px;"></div>
         </div>
-        <div id="chat-none" style="flex:1; display:flex; align-items:center; justify-content:center; color:var(--text-dim)">Выберите, кому написать</div>
     </div>
 </div>
 
-<div class="modal" id="profile-modal">
-    <div class="modal-content">
-        <h3 id="m-title">Профиль</h3>
-        <div class="avatar" id="edit-av-prev" style="width:100px; height:100px; cursor:pointer" onclick="document.getElementById('p-input').click()"></div>
-        <input type="file" id="p-input" hidden onchange="uploadPhoto(this)" accept="image/*">
-        <div id="my-edit-zone" style="width:100%; display:flex; flex-direction:column; gap:10px">
-            <input type="text" id="edit-name" placeholder="Имя">
-            <input type="text" id="edit-username" placeholder="Юзернейм">
-            <textarea id="edit-bio" style="background:#000; color:#fff; padding:10px; border-radius:10px; border:1px solid var(--border)" placeholder="О себе..."></textarea>
-            <button style="padding:12px; background:var(--accent); border:none; border-radius:10px; color:#fff; font-weight:600" onclick="saveProfile()">Сохранить</button>
+<div class="main-chat">
+    <div id="active-chat-ui" style="display:none; flex-direction:column; height:100%;">
+        <div class="chat-header" onclick="showProfile('other', currentPeerId)">
+            <div id="active-av" class="avatar"></div>
+            <div>
+                <div style="font-weight:600; display:flex; align-items:center;">
+                    <span id="active-name"></span><span id="active-badge"></span>
+                </div>
+                <div id="active-status" style="font-size:12px"></div>
+            </div>
         </div>
-        <div id="other-view-zone" style="width:100%; display:none; flex-direction:column; gap:10px">
-            <h2 id="v-name"></h2>
-            <div id="v-un" style="color:var(--accent)"></div>
-            <p id="v-bio" style="color:var(--text-dim)"></p>
-            <button id="start-btn" style="padding:12px; background:var(--accent); border:none; border-radius:10px; color:#fff; font-weight:600">Написать</button>
+        <div class="messages-container" id="messages-box"></div>
+        <div class="input-bar">
+            <input type="text" id="msg-input" placeholder="Написать сообщение..." onkeydown="if(event.key==='Enter') sendMsg()">
+            <button onclick="sendMsg()">➤</button>
         </div>
-        <button style="background:none; border:none; color:var(--text-dim); cursor:pointer" onclick="closeModal('profile-modal')">Закрыть</button>
+    </div>
+    <div id="empty-chat">
+        <h2>Untitled</h2>
+        <p>Выберите чат, чтобы начать общение</p>
+    </div>
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-box">
+        <div class="avatar" id="modal-av" style="width:100px; height:100px; margin: 0 auto 15px; cursor:pointer" onclick="document.getElementById('file-input').click()"></div>
+        <input type="file" id="file-input" hidden accept="image/*" onchange="uploadPhoto(this)">
+        
+        <div id="edit-mode">
+            <input type="text" id="edit-name" style="width:100%; padding:10px; background:#000; border:1px solid var(--border); border-radius:10px; color:#fff; outline:none" placeholder="Имя">
+            <textarea id="edit-bio" rows="3" placeholder="О себе..."></textarea>
+            <button class="btn-action btn-blue" onclick="saveProfile()">Сохранить</button>
+            <button id="admin-btn" class="btn-action btn-gold" style="display:none" onclick="alert('Открываю панель...')">Админ-панель</button>
+        </div>
+
+        <div id="view-mode" style="display:none">
+            <h2 id="view-name"></h2>
+            <p id="view-bio" style="color:var(--text-dim); margin-top:5px"></p>
+            <button class="btn-action btn-blue" id="chat-start-btn">Написать</button>
+        </div>
+
+        <button class="btn-action btn-danger" onclick="closeModal()">Закрыть</button>
     </div>
 </div>
 
@@ -154,163 +180,178 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth(), db = firebase.database();
 
-    let me = null, meData = null, activeChatId = null, currentViewUid = null, isReg = false;
+    let me = null, meData = null, activeChatId = null, currentPeerId = null, isReg = false;
 
-    // Галки: Желтая для админа, синяя для верифа
+    // Галки
     const getBadge = (u) => {
-        if(u.role === 'admin') return `<span class="verify-badge admin-badge">✓</span>`;
-        if(u.verified) return `<span class="verify-badge">✓</span>`;
+        if (u.role === 'admin') return `<span class="badge badge-gold">✓</span>`;
+        if (u.verified) return `<span class="badge badge-blue">✓</span>`;
         return '';
     };
 
     function drawAv(el, photo, name) {
-        if(!el) return;
-        if(photo) { el.style.backgroundImage = `url('${photo}')`; el.innerText = ''; }
+        if (!el) return;
+        if (photo) { el.style.backgroundImage = `url('${photo}')`; el.innerText = ''; }
         else { el.style.backgroundImage = 'none'; el.innerText = name ? name[0].toUpperCase() : '?'; }
     }
 
-    function playSound() { document.getElementById('msg-sound').play().catch(()=>{}); }
-
     auth.onAuthStateChanged(user => {
-        if(user) {
+        if (user) {
             me = user;
             db.ref('users/'+user.uid).on('value', s => {
-                meData = s.val(); if(!meData) return;
+                meData = s.val(); if (!meData) return;
                 document.getElementById('auth-screen').style.display = 'none';
-                document.getElementById('app').style.display = 'flex';
-                document.getElementById('my-name-bottom').innerHTML = meData.name + getBadge(meData);
-                document.getElementById('my-un-bottom').innerText = '@' + meData.username;
-                drawAv(document.getElementById('my-av-bottom'), meData.photo, meData.name);
+                document.getElementById('my-name-small').innerHTML = meData.name + getBadge(meData);
+                document.getElementById('my-un-small').innerText = '@' + meData.username;
+                drawAv(document.getElementById('my-av-small'), meData.photo, meData.name);
+                if (meData.role === 'admin') document.getElementById('admin-btn').style.display = 'block';
+                
                 db.ref('users/'+user.uid).update({online: true});
                 db.ref('users/'+user.uid).onDisconnect().update({online: false});
             });
             loadChats();
-        } else { document.getElementById('auth-screen').style.display = 'flex'; document.getElementById('app').style.display = 'none'; }
+        } else {
+            document.getElementById('auth-screen').style.display = 'flex';
+        }
     });
 
     function loadChats() {
         db.ref('chats').on('value', async s => {
-            const list = document.getElementById('chats-list'); list.innerHTML = '';
-            const allChats = s.val() || {};
-            for (let id in allChats) {
-                if(id.includes(me.uid) && !allChats[id][me.uid + '_hidden']) {
+            const container = document.getElementById('user-chats');
+            container.innerHTML = '';
+            const data = s.val() || {};
+            for (let id in data) {
+                if (id.includes(me.uid) && !data[id][me.uid+'_hidden']) {
                     const otherId = id.replace(me.uid, '').replace('_', '');
                     const uSnap = await db.ref('users/'+otherId).once('value');
-                    const u = uSnap.val(); if(!u) continue;
-                    
-                    const item = document.createElement('div');
-                    item.className = `item ${activeChatId===id?'active':''} ${u.online?'is-online':''}`;
-                    item.onclick = () => openChat(id, u);
-                    item.innerHTML = `
-                        <div class="avatar" id="c-${u.uid}"><div class="online-status"></div></div>
+                    const u = uSnap.val();
+                    if (!u) continue;
+
+                    const div = document.createElement('div');
+                    div.className = `chat-item ${activeChatId === id ? 'active' : ''} ${u.online ? 'is-online' : ''}`;
+                    div.onclick = () => openChat(id, u);
+                    div.innerHTML = `
+                        <div class="avatar" id="av-${u.uid}"><div class="online-dot"></div></div>
                         <div style="overflow:hidden">
-                            <b>${u.name}${getBadge(u)}</b>
-                            <div class="status-text ${u.online?'status-online':'status-offline'}">${u.online?'в сети':'был(а) недавно'}</div>
-                        </div>`;
-                    list.appendChild(item); drawAv(document.getElementById('c-'+u.uid), u.photo, u.name);
+                            <div style="font-weight:600">${u.name}${getBadge(u)}</div>
+                            <div class="u-status ${u.online ? 'on' : 'off'}">${u.online ? 'в сети' : 'был(а) недавно'}</div>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                    drawAv(document.getElementById('av-'+u.uid), u.photo, u.name);
                 }
             }
         });
     }
 
-    function openChat(id, otherUser) {
-        activeChatId = id; currentViewUid = otherUser.uid;
-        document.getElementById('tab-title').innerText = "Чат с " + otherUser.name;
-        document.getElementById('chat-none').style.display = 'none';
-        document.getElementById('chat-active').style.display = 'flex';
-        document.getElementById('active-name').innerText = otherUser.name;
-        document.getElementById('active-verify').innerHTML = getBadge(otherUser);
-        document.getElementById('active-un').innerText = '@' + otherUser.username;
-        drawAv(document.getElementById('active-av'), otherUser.photo, otherUser.name);
-        
+    function openChat(id, user) {
+        activeChatId = id; currentPeerId = user.uid;
+        document.getElementById('tab-title').innerText = user.name + " | Untitled";
+        document.getElementById('empty-chat').style.display = 'none';
+        document.getElementById('active-chat-ui').style.display = 'flex';
+        document.getElementById('active-name').innerText = user.name;
+        document.getElementById('active-badge').innerHTML = getBadge(user);
+        document.getElementById('active-status').innerText = user.online ? 'в сети' : 'был(а) недавно';
+        document.getElementById('active-status').className = 'u-status ' + (user.online ? 'on' : 'off');
+        drawAv(document.getElementById('active-av'), user.photo, user.name);
+
         db.ref('messages/'+id).off();
         db.ref('messages/'+id).on('value', s => {
             const box = document.getElementById('messages-box');
-            const data = s.val() || {};
-            const keys = Object.keys(data);
-            const lastMsg = data[keys[keys.length-1]];
-            
-            if(lastMsg && lastMsg.from !== me.uid) playSound();
-
+            const msgs = s.val() || {};
+            const keys = Object.keys(msgs);
+            if (keys.length > 0 && msgs[keys[keys.length-1]].from !== me.uid) {
+                document.getElementById('notif-sound').play().catch(()=>{});
+            }
             box.innerHTML = '';
-            Object.values(data).forEach(m => {
-                box.innerHTML += `<div class="msg ${m.from===me.uid?'out':'in'}">${m.text}</div>`;
+            Object.values(msgs).forEach(m => {
+                const mDiv = document.createElement('div');
+                mDiv.className = `message ${m.from === me.uid ? 'mine' : 'theirs'}`;
+                mDiv.innerText = m.text;
+                box.appendChild(mDiv);
             });
             box.scrollTop = box.scrollHeight;
         });
     }
 
     function sendMsg() {
-        const inp = document.getElementById('msg-input'); if(!inp.value.trim() || !activeChatId) return;
+        const inp = document.getElementById('msg-input');
+        if (!inp.value.trim() || !activeChatId) return;
         const otherId = activeChatId.replace(me.uid, '').replace('_', '');
         db.ref('messages/'+activeChatId).push({ from: me.uid, text: inp.value, ts: Date.now() });
-        db.ref('chats/'+activeChatId).update({lastMsg: inp.value, lastTs: Date.now(), [me.uid+'_hidden']: false, [otherId+'_hidden']: false});
+        db.ref('chats/'+activeChatId).update({ lastMsg: inp.value, [me.uid+'_hidden']: false, [otherId+'_hidden']: false });
         inp.value = '';
     }
 
     async function handleAuth() {
         const email = document.getElementById('auth-email').value, pass = document.getElementById('auth-pass').value;
         try {
-            if(isReg) {
+            if (isReg) {
                 const un = document.getElementById('auth-username').value.toLowerCase().trim();
                 const res = await auth.createUserWithEmailAndPassword(email, pass);
-                await db.ref('users/'+res.user.uid).set({uid:res.user.uid, name:document.getElementById('auth-name').value, username:un, email, bio:'', photo:'', online:true, verified:false, role:'user'});
+                await db.ref('users/'+res.user.uid).set({ uid: res.user.uid, name: document.getElementById('auth-name').value, username: un, email, role: 'user', online: true, verified: false, photo: '' });
                 await db.ref('usernames/'+un).set(res.user.uid);
             } else { await auth.signInWithEmailAndPassword(email, pass); }
         } catch(e) { alert(e.message); }
     }
 
+    function showProfile(type, uid) {
+        const targetId = uid || me.uid;
+        db.ref('users/'+targetId).once('value', s => {
+            const u = s.val();
+            drawAv(document.getElementById('modal-av'), u.photo, u.name);
+            if (type === 'me') {
+                document.getElementById('edit-mode').style.display = 'block';
+                document.getElementById('view-mode').style.display = 'none';
+                document.getElementById('edit-name').value = u.name;
+                document.getElementById('edit-bio').value = u.bio || '';
+            } else {
+                document.getElementById('edit-mode').style.display = 'none';
+                document.getElementById('view-mode').style.display = 'block';
+                document.getElementById('view-name').innerHTML = u.name + getBadge(u);
+                document.getElementById('view-bio').innerText = u.bio || 'Нет описания';
+                document.getElementById('chat-start-btn').onclick = () => {
+                    const id = [me.uid, u.uid].sort().join('_');
+                    openChat(id, u); closeModal();
+                };
+            }
+            document.getElementById('modal').style.display = 'flex';
+        });
+    }
+
+    async function uploadPhoto(input) {
+        if (!input.files[0]) return;
+        const fd = new FormData(); fd.append('image', input.files[0]);
+        const r = await fetch('https://api.imgbb.com/1/upload?key='+IMGBB_KEY, {method:'POST', body:fd});
+        const d = await r.json();
+        await db.ref('users/'+me.uid).update({photo: d.data.url});
+        drawAv(document.getElementById('modal-av'), d.data.url, meData.name);
+    }
+
+    async function saveProfile() {
+        await db.ref('users/'+me.uid).update({ name: document.getElementById('edit-name').value, bio: document.getElementById('edit-bio').value });
+        closeModal();
+    }
+
     function searchUsers(v) {
-        const q = v.toLowerCase().trim(); if(!q) { document.getElementById('search-results').style.display='none'; return; }
-        db.ref('users').orderByChild('username').startAt(q).endAt(q+'\uf8ff').once('value', s => {
-            const l = document.getElementById('search-list'); l.innerHTML = '';
-            document.getElementById('search-results').style.display='block';
+        const res = document.getElementById('search-results');
+        if (!v.trim()) { res.innerHTML = ''; return; }
+        db.ref('users').orderByChild('username').startAt(v.toLowerCase()).endAt(v.toLowerCase()+'\uf8ff').once('value', s => {
+            res.innerHTML = '<div class="list-label">Результаты поиска</div>';
             Object.values(s.val() || {}).forEach(u => {
-                if(u.uid === me.uid) return;
-                const i = document.createElement('div'); i.className = 'item';
-                i.innerHTML = `<div class="avatar" id="s-${u.uid}"></div><div><b>${u.name}${getBadge(u)}</b><div style="color:var(--accent)">@${u.username}</div></div>`;
-                i.onclick = () => showProfile('other', u.uid);
-                l.appendChild(i); drawAv(document.getElementById('s-'+u.uid), u.photo, u.name);
+                if (u.uid === me.uid) return;
+                const div = document.createElement('div');
+                div.className = 'chat-item';
+                div.innerHTML = `<div class="avatar" id="s-${u.uid}"></div><div><b>${u.name}${getBadge(u)}</b><br><small>@${u.username}</small></div>`;
+                div.onclick = () => showProfile('other', u.uid);
+                res.appendChild(div);
+                drawAv(document.getElementById('s-'+u.uid), u.photo, u.name);
             });
         });
     }
 
-    async function showProfile(type, uid) {
-        currentViewUid = uid || me.uid;
-        const s = await db.ref('users/'+currentViewUid).once('value');
-        const u = s.val(); if(!u) return;
-        document.getElementById('my-edit-zone').style.display = type==='me'?'flex':'none';
-        document.getElementById('other-view-zone').style.display = type==='me'?'none':'flex';
-        drawAv(document.getElementById('edit-av-prev'), u.photo, u.name);
-        if(type==='me') {
-            document.getElementById('edit-name').value = u.name;
-            document.getElementById('edit-username').value = u.username;
-            document.getElementById('edit-bio').value = u.bio || '';
-        } else {
-            document.getElementById('v-name').innerHTML = u.name + getBadge(u);
-            document.getElementById('v-un').innerText = '@' + u.username;
-            document.getElementById('v-bio').innerText = u.bio || '';
-            document.getElementById('start-btn').onclick = () => {
-                const id = [me.uid, u.uid].sort().join('_');
-                db.ref('chats/'+id).update({exists:true, [me.uid+'_hidden']: false});
-                openChat(id, u);
-                closeModal('profile-modal');
-            };
-        }
-        document.getElementById('profile-modal').style.display = 'flex';
-    }
-
     function toggleAuth() { isReg = !isReg; document.getElementById('reg-fields').style.display = isReg?'block':'none'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    async function uploadPhoto(input) {
-        const fd = new FormData(); fd.append('image', input.files[0]);
-        const r = await fetch('https://api.imgbb.com/1/upload?key='+IMGBB_KEY, {method:'POST', body:fd});
-        const d = await r.json(); await db.ref('users/'+me.uid).update({photo: d.data.url});
-    }
-    async function saveProfile() {
-        await db.ref('users/'+me.uid).update({name: document.getElementById('edit-name').value, bio: document.getElementById('edit-bio').value});
-        closeModal('profile-modal');
-    }
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
 </script>
 </body>
 </html>
