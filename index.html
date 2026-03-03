@@ -21,7 +21,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
         body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; }
 
-        /* Auth Screen */
+        /* Auth */
         #auth-screen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; }
         .auth-card { background: var(--card); padding: 40px; border-radius: 28px; width: 340px; text-align: center; border: 1px solid var(--border); }
         .auth-card input { width: 100%; padding: 14px; margin-bottom: 10px; background: #000; border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; }
@@ -33,8 +33,6 @@
         .search-area input { width: 100%; padding: 12px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; }
         
         .chat-list { flex: 1; overflow-y: auto; }
-        .list-label { padding: 15px 20px 5px; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
-
         .chat-item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; }
         .chat-item:hover { background: #1a1a1a; }
         .chat-item.active { background: #1a1a1a; border-left-color: var(--accent); }
@@ -47,7 +45,7 @@
         .badge-blue { background: var(--verify-blue); color: white; }
         .badge-gold { background: var(--admin-gold); color: black; font-weight: bold; }
 
-        /* Main Chat Area */
+        /* Main Chat */
         .main-chat { flex: 1; display: flex; flex-direction: column; background: var(--bg); position: relative; }
         .chat-header { padding: 15px 25px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 15px; cursor: pointer; }
         
@@ -56,29 +54,33 @@
         .message.mine { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 4px; }
         .message.theirs { background: var(--card); align-self: flex-start; border-bottom-left-radius: 4px; }
 
-        .input-bar { padding: 20px; display: flex; gap: 12px; border-top: 1px solid var(--border); background: var(--bg); }
+        .input-bar { padding: 20px; display: flex; gap: 12px; border-top: 1px solid var(--border); }
         .input-bar input { flex: 1; background: var(--card); border: 1px solid var(--border); padding: 14px; border-radius: 14px; color: #fff; outline: none; }
-        .input-bar button { background: var(--accent); border: none; width: 48px; border-radius: 14px; color: #fff; cursor: pointer; font-size: 18px; }
+        .input-bar button { background: var(--accent); border: none; width: 48px; border-radius: 14px; color: #fff; cursor: pointer; }
 
-        /* Modal Profile */
+        /* Modals */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 5000; align-items: center; justify-content: center; }
-        .modal-box { background: var(--card); padding: 40px; border-radius: 32px; width: 400px; border: 1px solid var(--border); text-align: center; }
+        .modal-box { background: var(--card); padding: 30px; border-radius: 32px; width: 380px; border: 1px solid var(--border); text-align: center; }
         
-        .modal-avatar { width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 15px; background-size: cover; background-position: center; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .modal-name { font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .modal-un { color: var(--accent); font-size: 16px; margin-bottom: 5px; }
-        .modal-bio { color: var(--text-dim); font-size: 14px; margin-bottom: 25px; }
+        .modal-avatar { width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 15px; background-size: cover; background-position: center; border: 2px solid var(--border); cursor: pointer; transition: transform 0.2s; }
+        .modal-avatar:hover { transform: scale(1.05); }
 
-        .btn-action { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .btn-action { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; margin-top: 10px; }
         .btn-blue { background: var(--accent); color: white; }
-        .btn-blue:hover { background: #0063cc; }
+        .btn-gold { background: var(--admin-gold); color: black; }
         
-        .edit-input { width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); border-radius: 10px; color: #fff; margin-bottom: 10px; outline: none; text-align: center; }
+        .edit-input { width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); border-radius: 10px; color: #fff; margin-bottom: 10px; outline: none; }
+
+        /* Fullscreen View */
+        #fs-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; align-items: center; justify-content: center; cursor: zoom-out; }
+        #fs-img { max-width: 90%; max-height: 90%; border-radius: 10px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
 
 <audio id="notif-sound" src="https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3" preload="auto"></audio>
+
+<div id="fs-overlay" onclick="this.style.display='none'"><img id="fs-img" src=""></div>
 
 <div id="auth-screen">
     <div class="auth-card">
@@ -95,16 +97,15 @@
 </div>
 
 <div class="sidebar">
-    <div class="search-area"><input type="text" id="search-inp" placeholder="Поиск в Untitled..." oninput="searchUsers(this.value)"></div>
+    <div class="search-area"><input type="text" id="search-inp" placeholder="Поиск..." oninput="searchUsers(this.value)"></div>
     <div class="chat-list">
         <div id="search-results"></div>
-        <div class="list-label">Ваши чаты</div>
         <div id="user-chats"></div>
     </div>
     <div style="padding:15px 20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:12px; cursor:pointer" onclick="showProfile('me')">
         <div class="avatar" id="my-av-small"></div>
         <div style="overflow:hidden">
-            <div id="my-name-small" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+            <div id="my-name-small" style="font-weight:600;"></div>
             <div id="my-un-small" style="color:var(--accent); font-size:12px;"></div>
         </div>
     </div>
@@ -123,7 +124,7 @@
         </div>
         <div class="messages-container" id="messages-box"></div>
         <div class="input-bar">
-            <input type="text" id="msg-input" placeholder="Напишите что-нибудь..." onkeydown="if(event.key==='Enter') sendMsg()">
+            <input type="text" id="msg-input" placeholder="Написать..." onkeydown="if(event.key==='Enter') sendMsg()">
             <button onclick="sendMsg()">➤</button>
         </div>
     </div>
@@ -134,23 +135,24 @@
 
 <div class="modal" id="modal">
     <div class="modal-box">
-        <div class="modal-avatar" id="modal-av" onclick="document.getElementById('file-input').click()"></div>
-        <input type="file" id="file-input" hidden accept="image/*" onchange="uploadPhoto(this)">
-        
-        <div id="profile-view-content">
-            <div class="modal-name" id="view-name"></div>
-            <div class="modal-un" id="view-un"></div>
-            <div class="modal-bio" id="view-bio"></div>
-        </div>
+        <div class="modal-avatar" id="modal-av" onclick="openFullscreen()"></div>
+        <div id="profile-content">
+            <h2 id="view-name"></h2>
+            <div id="view-un" style="color:var(--accent); margin-bottom:5px"></div>
+            <div id="view-bio" style="color:var(--text-dim); margin-bottom:15px"></div>
+            
+            <div id="me-controls" style="display:none">
+                <input type="text" id="edit-name" class="edit-input" placeholder="Имя">
+                <input type="text" id="edit-bio" class="edit-input" placeholder="О себе">
+                <button class="btn-action btn-blue" onclick="saveProfile()">Сохранить изменения</button>
+                <button id="admin-panel-btn" class="btn-action btn-gold" style="display:none">Админ-панель</button>
+                <input type="file" id="file-input" hidden accept="image/*" onchange="uploadPhoto(this)">
+                <button class="btn-action" style="background:#222; color:#fff" onclick="document.getElementById('file-input').click()">Сменить фото</button>
+            </div>
 
-        <div id="edit-mode" style="display:none">
-            <input type="text" id="edit-name" class="edit-input" placeholder="Имя">
-            <input type="text" id="edit-bio" class="edit-input" placeholder="Био (например: Untitled CEO)">
-            <button class="btn-action btn-blue" onclick="saveProfile()">Сохранить</button>
+            <button id="chat-start-btn" class="btn-action btn-blue" style="display:none">Написать сообщение</button>
+            <button class="btn-action" style="background:none; color:var(--text-dim)" onclick="closeModal()">Закрыть</button>
         </div>
-
-        <button id="chat-start-btn" class="btn-action btn-blue" style="display:none">Написать</button>
-        <button class="btn-action" style="background:none; color:var(--text-dim)" onclick="closeModal()">Закрыть</button>
     </div>
 </div>
 
@@ -173,6 +175,7 @@
     const auth = firebase.auth(), db = firebase.database();
 
     let me = null, meData = null, activeChatId = null, currentPeerId = null, isReg = false;
+    let currentModalPhoto = "";
 
     const getBadge = (u) => {
         if (u.role === 'admin') return `<span class="badge badge-gold">✓</span>`;
@@ -184,6 +187,13 @@
         if (!el) return;
         if (photo) { el.style.backgroundImage = `url('${photo}')`; el.innerText = ''; }
         else { el.style.backgroundImage = 'none'; el.innerText = name ? name[0].toUpperCase() : '?'; }
+    }
+
+    function openFullscreen() {
+        if (currentModalPhoto) {
+            document.getElementById('fs-img').src = currentModalPhoto;
+            document.getElementById('fs-overlay').style.display = 'flex';
+        }
     }
 
     auth.onAuthStateChanged(user => {
@@ -204,15 +214,13 @@
 
     function loadChats() {
         db.ref('chats').on('value', async s => {
-            const container = document.getElementById('user-chats');
-            container.innerHTML = '';
+            const container = document.getElementById('user-chats'); container.innerHTML = '';
             const data = s.val() || {};
             for (let id in data) {
                 if (id.includes(me.uid)) {
                     const otherId = id.replace(me.uid, '').replace('_', '');
                     const uSnap = await db.ref('users/'+otherId).once('value');
                     const u = uSnap.val(); if (!u) continue;
-
                     const div = document.createElement('div');
                     div.className = `chat-item ${activeChatId === id ? 'active' : ''}`;
                     div.onclick = () => openChat(id, u);
@@ -232,7 +240,7 @@
 
     function openChat(id, user) {
         activeChatId = id; currentPeerId = user.uid;
-        document.getElementById('tab-title').innerText = user.name + " | Untitled";
+        document.getElementById('tab-title').innerText = "Untitled | " + user.name;
         document.getElementById('empty-chat').style.display = 'none';
         document.getElementById('active-chat-ui').style.display = 'flex';
         document.getElementById('active-name').innerText = user.name;
@@ -259,31 +267,25 @@
         });
     }
 
-    function sendMsg() {
-        const inp = document.getElementById('msg-input');
-        if (!inp.value.trim() || !activeChatId) return;
-        db.ref('messages/'+activeChatId).push({ from: me.uid, text: inp.value, ts: Date.now() });
-        db.ref('chats/'+activeChatId).update({ lastMsg: inp.value, lastTs: Date.now() });
-        inp.value = '';
-    }
-
     function showProfile(type, uid) {
         const targetId = uid || me.uid;
         db.ref('users/'+targetId).once('value', s => {
             const u = s.val();
+            currentModalPhoto = u.photo;
             document.getElementById('view-name').innerHTML = u.name + getBadge(u);
             document.getElementById('view-un').innerText = '@' + u.username;
-            document.getElementById('view-bio').innerText = u.bio || '';
+            document.getElementById('view-bio').innerText = u.bio || 'Нет описания';
             drawAv(document.getElementById('modal-av'), u.photo, u.name);
             
-            document.getElementById('edit-mode').style.display = type === 'me' ? 'block' : 'none';
-            document.getElementById('profile-view-content').style.display = type === 'me' ? 'none' : 'block';
-            document.getElementById('chat-start-btn').style.display = type === 'me' ? 'none' : 'block';
-
             if (type === 'me') {
+                document.getElementById('me-controls').style.display = 'block';
+                document.getElementById('chat-start-btn').style.display = 'none';
                 document.getElementById('edit-name').value = u.name;
                 document.getElementById('edit-bio').value = u.bio || '';
+                if (u.role === 'admin') document.getElementById('admin-panel-btn').style.display = 'block';
             } else {
+                document.getElementById('me-controls').style.display = 'none';
+                document.getElementById('chat-start-btn').style.display = 'block';
                 document.getElementById('chat-start-btn').onclick = () => {
                     const id = [me.uid, u.uid].sort().join('_');
                     db.ref('chats/'+id).update({exists: true});
@@ -294,26 +296,36 @@
         });
     }
 
+    async function saveProfile() {
+        const newName = document.getElementById('edit-name').value;
+        const newBio = document.getElementById('edit-bio').value;
+        await db.ref('users/'+me.uid).update({ name: newName, bio: newBio });
+        closeModal();
+    }
+
     async function uploadPhoto(input) {
+        if (!input.files[0]) return;
         const fd = new FormData(); fd.append('image', input.files[0]);
         const r = await fetch('https://api.imgbb.com/1/upload?key='+IMGBB_KEY, {method:'POST', body:fd});
-        const d = await r.json(); await db.ref('users/'+me.uid).update({photo: d.data.url});
+        const d = await r.json();
+        await db.ref('users/'+me.uid).update({photo: d.data.url});
+        currentModalPhoto = d.data.url;
         drawAv(document.getElementById('modal-av'), d.data.url, meData.name);
     }
 
-    async function saveProfile() {
-        await db.ref('users/'+me.uid).update({ 
-            name: document.getElementById('edit-name').value,
-            bio: document.getElementById('edit-bio').value 
-        });
-        closeModal();
+    function sendMsg() {
+        const inp = document.getElementById('msg-input');
+        if (!inp.value.trim() || !activeChatId) return;
+        db.ref('messages/'+activeChatId).push({ from: me.uid, text: inp.value, ts: Date.now() });
+        db.ref('chats/'+activeChatId).update({ lastMsg: inp.value, lastTs: Date.now() });
+        inp.value = '';
     }
 
     function searchUsers(v) {
         const res = document.getElementById('search-results');
         if (!v.trim()) { res.innerHTML = ''; return; }
         db.ref('users').orderByChild('username').startAt(v.toLowerCase()).endAt(v.toLowerCase()+'\uf8ff').once('value', s => {
-            res.innerHTML = '<div class="list-label">Поиск</div>';
+            res.innerHTML = '<div style="padding:10px 20px; font-size:11px; color:var(--text-dim)">ПОИСК</div>';
             Object.values(s.val() || {}).forEach(u => {
                 if (u.uid === me.uid) return;
                 const div = document.createElement('div');
