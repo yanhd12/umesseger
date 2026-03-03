@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flame — Deep Dark</title>
+    <title>Flame — Deep Dark Admin Edition</title>
     <style>
         :root {
             --bg: #000000;
@@ -16,6 +16,7 @@
             --online: #34c759;
             --red: #ff3b30;
             --verify: #0095f6;
+            --admin-gold: #ff9500;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
@@ -47,40 +48,36 @@
 
         .verify-badge { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; background: var(--verify); color: white; border-radius: 50%; font-size: 9px; margin-left: 5px; }
 
+        /* Modals */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .modal-content { background: var(--card); padding: 30px; border-radius: 28px; width: 90%; max-width: 400px; text-align: center; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 15px; align-items: center; max-height: 90vh; overflow-y: auto; }
+        .modal-content input, .modal-content textarea { width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; resize: none; }
+        
+        .btn-primary { width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: 12px; color: #fff; font-weight: 600; cursor: pointer; }
+        .btn-admin { background: var(--admin-gold) !important; margin-top: 10px; }
+        .btn-danger { background: var(--red) !important; }
+        .btn-text { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 14px; }
+
+        /* Admin Panel specific */
+        .admin-user-card { width: 100%; background: #000; padding: 10px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border); text-align: left; }
+
         /* Context Menu */
-        #context-menu { 
-            display: none; position: fixed; background: #1c1c1e; border: 1px solid #333; 
-            border-radius: 12px; z-index: 5000; width: 200px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden;
-        }
+        #context-menu { display: none; position: fixed; background: #1c1c1e; border: 1px solid #333; border-radius: 12px; z-index: 5000; width: 200px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .menu-item { padding: 12px 16px; font-size: 14px; cursor: pointer; transition: 0.2s; color: #fff; }
         .menu-item:hover { background: #2c2c2e; }
-        .menu-item.danger { color: var(--red); }
 
-        /* Chat */
         .chat-main { flex: 1; display: flex; flex-direction: column; background: var(--bg); }
         .messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
         .msg { max-width: 75%; padding: 10px 16px; border-radius: 18px; font-size: 15px; }
         .msg.in { background: var(--card); align-self: flex-start; border-bottom-left-radius: 4px; }
         .msg.out { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 4px; }
-
-        /* Modals */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .modal-content { background: var(--card); padding: 30px; border-radius: 28px; width: 90%; max-width: 380px; text-align: center; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 15px; align-items: center; }
-        .modal-content input, .modal-content textarea { width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; resize: none; }
-        
-        .btn-primary { width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: 12px; color: #fff; font-weight: 600; cursor: pointer; }
-        .btn-text { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 14px; }
-        .btn-admin { background: #ff9500 !important; }
-
-        #fs-view { display: none; position: fixed; inset: 0; background: #000; z-index: 3000; align-items: center; justify-content: center; }
-        #fs-view img { max-width: 95%; max-height: 95%; object-fit: contain; }
     </style>
 </head>
 <body onclick="hideContextMenu()" oncontextmenu="return false;">
 
 <div id="context-menu">
     <div class="menu-item" onclick="deleteChat('me')">Удалить у себя</div>
-    <div class="menu-item danger" onclick="deleteChat('both')">Удалить у обоих</div>
+    <div class="menu-item" style="color:var(--red)" onclick="deleteChat('both')">Удалить у обоих</div>
 </div>
 
 <div id="auth-screen">
@@ -93,13 +90,13 @@
         <input type="email" id="auth-email" placeholder="Email">
         <input type="password" id="auth-pass" placeholder="Пароль">
         <button onclick="handleAuth()">Войти</button>
-        <p style="color:var(--text-dim); cursor:pointer; font-size: 13px; margin-top:15px" onclick="toggleAuth()">Сменить режим</p>
+        <p class="btn-text" style="margin-top:15px" onclick="toggleAuth()">Сменить режим</p>
     </div>
 </div>
 
 <div id="app">
     <div class="sidebar">
-        <div class="search-box"><input type="text" id="user-search" placeholder="Поиск..." oninput="searchUsers(this.value)"></div>
+        <div class="search-box"><input type="text" id="user-search" placeholder="Поиск пользователей..." oninput="searchUsers(this.value)"></div>
         <div class="list-container">
             <div id="search-results" style="display:none"><div id="search-list"></div></div>
             <div class="list-label">Чаты</div>
@@ -130,17 +127,19 @@
 <div class="modal" id="profile-modal">
     <div class="modal-content">
         <h3 id="m-title">Профиль</h3>
-        <div class="avatar" id="edit-av-prev" style="width:100px; height:100px; cursor:pointer"></div>
-        <input type="file" id="p-input" hidden onchange="uploadPhoto(this)">
+        <div class="avatar" id="edit-av-prev" style="width:100px; height:100px; cursor:pointer" onclick="document.getElementById('p-input').click()"></div>
+        <input type="file" id="p-input" hidden onchange="uploadPhoto(this)" accept="image/*">
+        
         <div id="my-edit-zone" style="width:100%; display:flex; flex-direction:column; gap:10px">
             <input type="text" id="edit-name" placeholder="Имя">
             <input type="text" id="edit-username" placeholder="Юзернейм">
             <textarea id="edit-bio" placeholder="О себе..."></textarea>
-            <div id="role-info" style="color:var(--accent); font-size:12px"></div>
+            <div id="role-info" style="color:var(--admin-gold); font-size:12px"></div>
             <button class="btn-primary" onclick="saveProfile()">Сохранить</button>
-            <div id="admin-area" style="width:100%"></div>
-            <button class="btn-text" style="color:var(--red)" onclick="auth.signOut()">Выйти</button>
+            <button id="admin-entry-btn" class="btn-primary btn-admin" style="display:none" onclick="openAdminPanel()">Админ-панель</button>
+            <button class="btn-text" style="color:var(--red)" onclick="auth.signOut(); location.reload();">Выйти</button>
         </div>
+
         <div id="other-view-zone" style="width:100%; display:none; flex-direction:column; gap:10px">
             <h2 id="v-name"></h2>
             <div id="v-un" style="color:var(--accent)"></div>
@@ -151,7 +150,13 @@
     </div>
 </div>
 
-<div id="fs-view" onclick="this.style.display='none'"><img id="fs-img"></div>
+<div class="modal" id="admin-modal">
+    <div class="modal-content">
+        <h3>Управление Flame</h3>
+        <div id="admin-users-list" style="width:100%; margin-top:10px;"></div>
+        <button class="btn-text" onclick="closeModal('admin-modal')">Закрыть</button>
+    </div>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -181,38 +186,7 @@
         else { el.style.backgroundImage = 'none'; el.innerText = name ? name[0].toUpperCase() : '?'; }
     }
 
-    // ПКМ Логика
-    function showContextMenu(e, chatId) {
-        e.preventDefault();
-        selectedChatId = chatId;
-        const menu = document.getElementById('context-menu');
-        menu.style.display = 'block';
-        menu.style.left = e.pageX + 'px';
-        menu.style.top = e.pageY + 'px';
-    }
-
-    function hideContextMenu() { document.getElementById('context-menu').style.display = 'none'; }
-
-    async function deleteChat(mode) {
-        if(!selectedChatId) return;
-        if(mode === 'me') {
-            // Удаляем только пометку о существовании чата для себя
-            await db.ref(`chats/${selectedChatId}/${me.uid}_hidden`).set(true);
-        } else if(mode === 'both') {
-            // Полная зачистка
-            if(confirm("Удалить чат и все сообщения навсегда для обоих?")) {
-                await db.ref('messages/' + selectedChatId).remove();
-                await db.ref('chats/' + selectedChatId).remove();
-            }
-        }
-        if(activeChatId === selectedChatId) {
-            document.getElementById('chat-active').style.display = 'none';
-            document.getElementById('chat-none').style.display = 'flex';
-        }
-        hideContextMenu();
-    }
-
-    // Авторизация
+    // AUTH
     async function handleAuth() {
         const email = document.getElementById('auth-email').value, pass = document.getElementById('auth-pass').value;
         try {
@@ -236,6 +210,10 @@
                 document.getElementById('my-name-bottom').innerHTML = meData.name + getVerifyBadge(meData.verified);
                 document.getElementById('my-un-bottom').innerText = '@' + meData.username;
                 drawAv(document.getElementById('my-av-bottom'), meData.photo, meData.name);
+                
+                // Show admin button if role is admin
+                if(meData.role === 'admin') document.getElementById('admin-entry-btn').style.display = 'block';
+
                 db.ref('users/'+user.uid).update({online: true});
                 db.ref('users/'+user.uid).onDisconnect().update({online: false});
             });
@@ -243,19 +221,16 @@
         } else { document.getElementById('auth-screen').style.display = 'flex'; document.getElementById('app').style.display = 'none'; }
     });
 
+    // CHATS & MESSAGES
     function loadChats() {
         db.ref('chats').on('value', async s => {
             const list = document.getElementById('chats-list'); list.innerHTML = '';
             const allChats = s.val() || {};
             for (let id in allChats) {
-                if(id.includes(me.uid)) {
-                    // Если чат скрыт "для меня", не показываем его
-                    if(allChats[id][me.uid + '_hidden']) continue;
-
+                if(id.includes(me.uid) && !allChats[id][me.uid + '_hidden']) {
                     const otherId = id.replace(me.uid, '').replace('_', '');
                     const uSnap = await db.ref('users/'+otherId).once('value');
                     const u = uSnap.val(); if(!u) continue;
-
                     const item = document.createElement('div');
                     item.className = `item ${activeChatId===id?'active':''} ${u.online?'is-online':''}`;
                     item.oncontextmenu = (e) => showContextMenu(e, id);
@@ -288,43 +263,70 @@
 
     function sendMsg() {
         const inp = document.getElementById('msg-input'); if(!inp.value.trim() || !activeChatId) return;
-        const msg = { from: me.uid, text: inp.value, ts: Date.now() };
-        db.ref('messages/'+activeChatId).push(msg);
-        // При отправке нового сообщения чат снова становится видимым у обоих
-        const updateObj = {lastMsg: inp.value, lastTs: Date.now()};
-        updateObj[me.uid + '_hidden'] = false;
         const otherId = activeChatId.replace(me.uid, '').replace('_', '');
-        updateObj[otherId + '_hidden'] = false;
-        
-        db.ref('chats/'+activeChatId).update(updateObj);
+        db.ref('messages/'+activeChatId).push({ from: me.uid, text: inp.value, ts: Date.now() });
+        db.ref('chats/'+activeChatId).update({lastMsg: inp.value, lastTs: Date.now(), [me.uid+'_hidden']: false, [otherId+'_hidden']: false});
         inp.value = '';
     }
 
-    async function saveProfile() {
-        const nName = document.getElementById('edit-name').value, nUn = document.getElementById('edit-username').value.toLowerCase().trim();
-        if(nUn !== meData.username) {
-            const check = await db.ref('usernames/'+nUn).once('value');
-            if(check.exists()) return alert("Ник занят");
-            await db.ref('usernames/'+meData.username).remove();
-            await db.ref('usernames/'+nUn).set(me.uid);
-        }
-        await db.ref('users/'+me.uid).update({name: nName, username: nUn, bio: document.getElementById('edit-bio').value});
-        closeModal('profile-modal');
+    // AVATAR UPLOAD FIX
+    async function uploadPhoto(input) {
+        if(!input.files[0]) return;
+        const prevEl = document.getElementById('edit-av-prev');
+        prevEl.style.opacity = '0.5';
+        const fd = new FormData(); fd.append('image', input.files[0]);
+        try {
+            const r = await fetch('https://api.imgbb.com/1/upload?key='+IMGBB_KEY, {method:'POST', body:fd});
+            const d = await r.json();
+            await db.ref('users/'+me.uid).update({photo: d.data.url});
+            drawAv(prevEl, d.data.url, meData.name);
+        } catch(e) { alert("Ошибка загрузки"); }
+        prevEl.style.opacity = '1';
     }
 
-    function searchUsers(v) {
-        const q = v.toLowerCase().trim(); if(!q) { document.getElementById('search-results').style.display='none'; return; }
-        db.ref('users').orderByChild('username').startAt(q).endAt(q+'\uf8ff').once('value', s => {
-            const l = document.getElementById('search-list'); l.innerHTML = '';
-            document.getElementById('search-results').style.display='block';
-            Object.values(s.val() || {}).forEach(u => {
-                if(u.uid === me.uid) return;
-                const i = document.createElement('div'); i.className = 'item';
-                i.innerHTML = `<div class="avatar" id="s-${u.uid}"></div><div><b>${u.name}</b><div style="color:var(--accent)">@${u.username}</div></div>`;
-                i.onclick = () => showProfile('other', u.uid);
-                l.appendChild(i); drawAv(document.getElementById('s-'+u.uid), u.photo, u.name);
-            });
+    // ADMIN PANEL LOGIC
+    async function openAdminPanel() {
+        closeModal('profile-modal');
+        document.getElementById('admin-modal').style.display = 'flex';
+        const s = await db.ref('users').once('value');
+        const list = document.getElementById('admin-users-list'); list.innerHTML = '';
+        Object.values(s.val() || {}).forEach(u => {
+            const card = document.createElement('div');
+            card.className = 'admin-user-card';
+            card.innerHTML = `
+                <b>${u.name}</b> (@${u.username})<br>
+                <small>UID: ${u.uid}</small><br>
+                <div style="margin-top:8px; display:flex; gap:5px; flex-wrap:wrap">
+                    <button onclick="adminToggleVerify('${u.uid}', ${!u.verified})">${u.verified?'Снять ✓':'Дать ✓'}</button>
+                    <button onclick="adminSetRole('${u.uid}', '${u.role==='admin'?'user':'admin'}')">${u.role==='admin'?'Снять админа':'Дать админа'}</button>
+                    <button class="btn-danger" style="padding:2px 8px; font-size:11px" onclick="adminDeleteUser('${u.uid}', '${u.username}')">БАН</button>
+                </div>
+            `;
+            list.appendChild(card);
         });
+    }
+
+    async function adminToggleVerify(uid, val) { await db.ref(`users/${uid}`).update({verified: val}); openAdminPanel(); }
+    async function adminSetRole(uid, role) { await db.ref(`users/${uid}`).update({role: role}); openAdminPanel(); }
+    async function adminDeleteUser(uid, un) {
+        if(confirm(`Удалить пользователя ${un} навсегда?`)) {
+            await db.ref(`users/${uid}`).remove();
+            await db.ref(`usernames/${un}`).remove();
+            openAdminPanel();
+        }
+    }
+
+    // UTILS
+    function toggleAuth() { isReg = !isReg; document.getElementById('reg-fields').style.display = isReg?'block':'none'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function showContextMenu(e, chatId) { e.preventDefault(); selectedChatId = chatId; const m = document.getElementById('context-menu'); m.style.display = 'block'; m.style.left = e.pageX + 'px'; m.style.top = e.pageY + 'px'; }
+    function hideContextMenu() { document.getElementById('context-menu').style.display = 'none'; }
+    
+    async function deleteChat(mode) {
+        if(mode==='me') await db.ref(`chats/${selectedChatId}/${me.uid}_hidden`).set(true);
+        else if(confirm("Удалить для всех?")) { await db.ref('messages/'+selectedChatId).remove(); await db.ref('chats/'+selectedChatId).remove(); }
+        document.getElementById('chat-active').style.display = 'none';
+        document.getElementById('chat-none').style.display = 'flex';
     }
 
     async function showProfile(type, uid) {
@@ -338,7 +340,7 @@
             document.getElementById('edit-name').value = u.name;
             document.getElementById('edit-username').value = u.username;
             document.getElementById('edit-bio').value = u.bio || '';
-            document.getElementById('role-info').innerText = "Роль: " + (u.role||'user');
+            document.getElementById('role-info').innerText = "Твоя роль: " + (u.role||'user');
         } else {
             document.getElementById('v-name').innerHTML = u.name + getVerifyBadge(u.verified);
             document.getElementById('v-un').innerText = '@' + u.username;
@@ -353,13 +355,33 @@
         document.getElementById('profile-modal').style.display = 'flex';
     }
 
-    function toggleAuth() { isReg = !isReg; document.getElementById('reg-fields').style.display = isReg?'block':'none'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    async function uploadPhoto(input) {
-        const fd = new FormData(); fd.append('image', input.files[0]);
-        const r = await fetch('https://api.imgbb.com/1/upload?key='+IMGBB_KEY, {method:'POST', body:fd});
-        const d = await r.json(); await db.ref('users/'+me.uid).update({photo: d.data.url});
+    function searchUsers(v) {
+        const q = v.toLowerCase().trim(); if(!q) { document.getElementById('search-results').style.display='none'; return; }
+        db.ref('users').orderByChild('username').startAt(q).endAt(q+'\uf8ff').once('value', s => {
+            const l = document.getElementById('search-list'); l.innerHTML = '';
+            document.getElementById('search-results').style.display='block';
+            Object.values(s.val() || {}).forEach(u => {
+                if(u.uid === me.uid) return;
+                const i = document.createElement('div'); i.className = 'item';
+                i.innerHTML = `<div class="avatar" id="s-${u.uid}"></div><div><b>${u.name}${getVerifyBadge(u.verified)}</b><div style="color:var(--accent)">@${u.username}</div></div>`;
+                i.onclick = () => showProfile('other', u.uid);
+                l.appendChild(i); drawAv(document.getElementById('s-'+u.uid), u.photo, u.name);
+            });
+        });
+    }
+
+    async function saveProfile() {
+        const nName = document.getElementById('edit-name').value, nUn = document.getElementById('edit-username').value.toLowerCase().trim();
+        if(nUn !== meData.username) {
+            const check = await db.ref('usernames/'+nUn).once('value');
+            if(check.exists()) return alert("Ник занят");
+            await db.ref('usernames/'+meData.username).remove();
+            await db.ref('usernames/'+nUn).set(me.uid);
+        }
+        await db.ref('users/'+me.uid).update({name: nName, username: nUn, bio: document.getElementById('edit-bio').value});
+        closeModal('profile-modal');
     }
 </script>
 </body>
+</html>
 </html>
